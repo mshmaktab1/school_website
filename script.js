@@ -298,7 +298,6 @@ function closeNewsModal() {
     const modal = document.getElementById('news-detail-modal');
     if (modal) modal.style.display = 'none';
 }
-});
 
 // Global functions for News Interaction (outside DOMContentLoaded to be accessible by inline onclick)
 function toggleNewsExpand(card) {
