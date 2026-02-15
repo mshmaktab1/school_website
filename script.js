@@ -242,13 +242,14 @@ function openNewsModal(newsId) {
             ${content}
         </div>
         <div class="news-modal-footer">
-            <a href="https://t.me/${news.id.split('/')[0]}/${news.id.split('/')[1]}" target="_blank" class="telegram-link-btn">
+            <a href="https://t.me/${news.id.split('/')[0] || 'channel'}/${news.id.split('/')[1] || ''}" target="_blank" class="telegram-link-btn">
                 <i class="fab fa-telegram"></i> Telegramda ko'rish
             </a>
         </div>
     `;
 
     modal.style.display = 'flex';
+    console.log('Modal opened for:', newsId);
 }
 
 function closeNewsModal() {
@@ -296,6 +297,7 @@ function closeImageModal() {
 
 // Theme Manager Logic
 // Theme Manager for Bootstrap
+// Theme Manager for Bootstrap
 const ThemeManager = {
     // CDN Map for Themes
     themes: {
@@ -303,26 +305,92 @@ const ThemeManager = {
         'cerulean': 'https://cdn.jsdelivr.net/npm/bootswatch@5.3.2/dist/cerulean/bootstrap.min.css',
         'cosmo': 'https://cdn.jsdelivr.net/npm/bootswatch@5.3.2/dist/cosmo/bootstrap.min.css',
         'darkly': 'https://cdn.jsdelivr.net/npm/bootswatch@5.3.2/dist/darkly/bootstrap.min.css',
-        'united': 'https://cdn.jsdelivr.net/npm/bootswatch@5.3.2/dist/united/bootstrap.min.css'
+        'united': 'https://cdn.jsdelivr.net/npm/bootswatch@5.3.2/dist/united/bootstrap.min.css',
+        'spring': 'https://cdn.jsdelivr.net/npm/bootswatch@5.3.2/dist/minty/bootstrap.min.css' // Minty is a good base for Spring
     },
+
+    animationInterval: null,
 
     init() {
         const savedTheme = localStorage.getItem('selectedTheme') || 'default';
         this.setTheme(savedTheme, false); // false = don't save again on init
+        this.setupSpringInteractions();
     },
 
     setTheme(themeName, save = true) {
         const themeUrl = this.themes[themeName];
         if (!themeUrl) return;
 
+        // Swap CSS
         const themeLink = document.getElementById('theme-css');
         if (themeLink) {
             themeLink.href = themeUrl;
         }
 
+        // Set Data Attribute for Custom Styles (like Spring)
+        document.documentElement.setAttribute('data-theme', themeName);
+
+        // Handle Animations
+        if (themeName === 'spring') {
+            this.startSpringAnimations();
+        } else {
+            this.stopSpringAnimations();
+        }
+
         if (save) {
             localStorage.setItem('selectedTheme', themeName);
         }
+    },
+
+    startSpringAnimations() {
+        if (this.animationInterval) return; // Already running
+
+        // Falling Flowers
+        const flowers = ['🌸', '🌺', '🌷', '🌿', '🍃'];
+        this.animationInterval = setInterval(() => {
+            const flower = document.createElement('div');
+            flower.className = 'spring-flower';
+            flower.textContent = flowers[Math.floor(Math.random() * flowers.length)];
+            flower.style.left = Math.random() * 100 + 'vw';
+            flower.style.animationDuration = Math.random() * 5 + 5 + 's'; // 5-10s fall
+            flower.style.fontSize = Math.random() * 1.5 + 1 + 'rem';
+            document.body.appendChild(flower);
+
+            // Cleanup
+            setTimeout(() => {
+                flower.remove();
+            }, 10000);
+        }, 800);
+    },
+
+    stopSpringAnimations() {
+        if (this.animationInterval) {
+            clearInterval(this.animationInterval);
+            this.animationInterval = null;
+        }
+        // Remove existing flowers immediately
+        document.querySelectorAll('.spring-flower').forEach(el => el.remove());
+    },
+
+    setupSpringInteractions() {
+        // Mouse Trail for Spring
+        document.addEventListener('mousemove', (e) => {
+            if (document.documentElement.getAttribute('data-theme') !== 'spring') return;
+
+            // Throttle creation to avoid lag
+            if (Math.random() > 0.1) return;
+
+            const trail = document.createElement('div');
+            trail.className = 'mouse-trail';
+            trail.textContent = '🌸'; // Apricot flower style
+            trail.style.left = e.clientX + 'px';
+            trail.style.top = e.clientY + 'px';
+            document.body.appendChild(trail);
+
+            setTimeout(() => {
+                trail.remove();
+            }, 1000);
+        });
     }
 };
 

@@ -9,6 +9,80 @@
     --gradient-main: linear-gradient(135deg, var(--dark-green), var(--primary-color), var(--secondary-color));
 }
 
+/* SPRING THEME OVERRIDES */
+[data-theme="spring"] {
+    --primary-color: #ff69b4;
+    /* Hot Pink */
+    --secondary-color: #ffb7c5;
+    /* Cherry Blossom Pink */
+    --accent-color: #90ee90;
+    /* Light Green */
+    --dark-green: #c71585;
+    /* Medium Violet Red */
+    --text-color: #4a235a;
+    --light-bg: #fff0f5;
+    /* Lavender Blush */
+    --white: #ffffff;
+    --gradient-main: linear-gradient(135deg, #ff69b4, #ffb7c5, #90ee90);
+}
+
+[data-theme="spring"] body {
+    background-image: linear-gradient(to bottom, #fff0f5, #e6ffe6);
+    background-attachment: fixed;
+}
+
+/* Spring Animations */
+.spring-flower {
+    position: fixed;
+    top: -10vh;
+    z-index: 9999;
+    pointer-events: none;
+    animation: fall linear infinite;
+    font-size: 1.5rem;
+    filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.1));
+}
+
+@keyframes fall {
+    0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 1;
+    }
+
+    90% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(110vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+.mouse-trail {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9998;
+    font-size: 1.2rem;
+    animation: fadeOut 1s forwards;
+}
+
+@keyframes fadeOut {
+    0% {
+        transform: scale(0.5) translateY(0);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1.5) translateY(-20px);
+        opacity: 0;
+    }
+}
+
+
 * {
     margin: 0;
     padding: 0;
