@@ -296,8 +296,6 @@ function closeImageModal() {
 }
 
 // Theme Manager Logic
-// Theme Manager for Bootstrap
-// Theme Manager for Bootstrap
 const ThemeManager = {
     // CDN Map for Themes
     themes: {
@@ -343,24 +341,30 @@ const ThemeManager = {
     },
 
     startSpringAnimations() {
-        if (this.animationInterval) return; // Already running
+        if (this.animationInterval) return;
 
-        // Falling Flowers
-        const flowers = ['🌸', '🌺', '🌷', '🌿', '🍃'];
+        // Natural White Blossoms and Vibrant Green Leaves (from Image)
+        const plantElements = [
+            // White Blossom with Yellow Center
+            '<svg viewBox="0 0 24 24" width="22" height="22"><circle cx="12" cy="12" r="10" fill="white" opacity="0.9"/><circle cx="12" cy="12" r="3" fill="#ffd700"/><path d="M12,2 Q15,5 12,8 Q9,5 12,2" fill="white" opacity="0.5" transform="rotate(0 12 12)"/><path d="M12,2 Q15,5 12,8 Q9,5 12,2" fill="white" opacity="0.5" transform="rotate(72 12 12)"/><path d="M12,2 Q15,5 12,8 Q9,5 12,2" fill="white" opacity="0.5" transform="rotate(144 12 12)"/><path d="M12,2 Q15,5 12,8 Q9,5 12,2" fill="white" opacity="0.5" transform="rotate(216 12 12)"/><path d="M12,2 Q15,5 12,8 Q9,5 12,2" fill="white" opacity="0.5" transform="rotate(288 12 12)"/></svg>',
+            // Vibrant Spring Leaf
+            '<svg viewBox="0 0 24 24" width="20" height="20"><path d="M17,8C8,10 5.9,16.17 3.82,21.34L5.71,22L6.66,19.7C7.14,19.87 7.64,20 8.17,20C12.14,20 17,14.9 17,8V8M16,2C16,2 14,2.1 12,3C12,3 9,4 9,8C9,8 9.1,9.7 10,11C10,11 12,14 16,14C16,14 20,14 22,10C22,10 22,2 16,2Z" fill="#a6ce39"/></svg>',
+            // Soft Light Blossom
+            '<svg viewBox="0 0 24 24" width="18" height="18"><circle cx="12" cy="12" r="8" fill="white" opacity="0.8"/><circle cx="12" cy="12" r="2" fill="#ffd700"/></svg>'
+        ];
+
         this.animationInterval = setInterval(() => {
-            const flower = document.createElement('div');
-            flower.className = 'spring-flower';
-            flower.textContent = flowers[Math.floor(Math.random() * flowers.length)];
-            flower.style.left = Math.random() * 100 + 'vw';
-            flower.style.animationDuration = Math.random() * 5 + 5 + 's'; // 5-10s fall
-            flower.style.fontSize = Math.random() * 1.5 + 1 + 'rem';
-            document.body.appendChild(flower);
+            if (document.documentElement.getAttribute('data-theme') !== 'spring') return;
 
-            // Cleanup
-            setTimeout(() => {
-                flower.remove();
-            }, 10000);
-        }, 800);
+            const el = document.createElement('div');
+            el.className = 'spring-flower';
+            el.innerHTML = plantElements[Math.floor(Math.random() * plantElements.length)];
+            el.style.left = Math.random() * 100 + 'vw';
+            el.style.animationDuration = Math.random() * 4 + 6 + 's'; // 6-10s fall (slower, more graceful)
+            document.body.appendChild(el);
+
+            setTimeout(() => el.remove(), 10000);
+        }, 1200); // Slower spawn rate
     },
 
     stopSpringAnimations() {
@@ -368,28 +372,25 @@ const ThemeManager = {
             clearInterval(this.animationInterval);
             this.animationInterval = null;
         }
-        // Remove existing flowers immediately
         document.querySelectorAll('.spring-flower').forEach(el => el.remove());
     },
 
     setupSpringInteractions() {
-        // Mouse Trail for Spring
         document.addEventListener('mousemove', (e) => {
             if (document.documentElement.getAttribute('data-theme') !== 'spring') return;
 
-            // Throttle creation to avoid lag
-            if (Math.random() > 0.1) return;
+            // Significantly reduced frequency (3% chance per move)
+            if (Math.random() > 0.03) return;
 
             const trail = document.createElement('div');
             trail.className = 'mouse-trail';
-            trail.textContent = '🌸'; // Apricot flower style
-            trail.style.left = e.clientX + 'px';
-            trail.style.top = e.clientY + 'px';
+            // White Blossom SVG for mouse trail
+            trail.innerHTML = '<svg viewBox="0 0 24 24" width="12" height="12"><circle cx="12" cy="12" r="10" fill="white" opacity="0.7"/><circle cx="12" cy="12" r="3" fill="#ffd700" opacity="0.8"/></svg>';
+            trail.style.left = (e.clientX - 7) + 'px';
+            trail.style.top = (e.clientY - 7) + 'px';
             document.body.appendChild(trail);
 
-            setTimeout(() => {
-                trail.remove();
-            }, 1000);
+            setTimeout(() => trail.remove(), 1500);
         });
     }
 };
