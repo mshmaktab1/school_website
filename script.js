@@ -8,51 +8,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Snowfall Effect
-    function createSnowflakes() {
-        const snowflakeCount = 20; // Number of snowflakes
+    // Winter/Holiday code removed as per user request
 
-        for (let i = 0; i < snowflakeCount; i++) {
-            const snowflake = document.createElement('div');
-            snowflake.classList.add('snowflake');
-            snowflake.textContent = '❄';
-            snowflake.style.left = Math.random() * 100 + 'vw';
-            snowflake.style.animationDuration = Math.random() * 3 + 10 + 's'; // Fall speed between 10-13s
-            snowflake.style.opacity = Math.random();
-            snowflake.style.fontSize = Math.random() * 20 + 10 + 'px';
-
-            document.body.appendChild(snowflake);
-        }
-    }
-
-    // Check if it's winter season (optional logic, but we'll force it for now based on user request)
-    createSnowflakes();
-    addholidayDecorations();
-
-    // Holiday Decorations Injection
-    function addholidayDecorations() {
-        // Lights Strand
-        const lightsStrand = document.createElement('div');
-        lightsStrand.className = 'lights-strand';
-        // Create 30 lights
-        for (let i = 0; i < 30; i++) {
-            const bulb = document.createElement('div');
-            bulb.className = 'light-bulb';
-            lightsStrand.appendChild(bulb);
-        }
-        document.body.prepend(lightsStrand);
-
-        // Corner Decors
-        const tl = document.createElement('div');
-        tl.className = 'corner-decor corner-top-left';
-        tl.innerHTML = '<div style="position:absolute; top:40px; left:40px; font-size:30px;">🎀</div>';
-        document.body.appendChild(tl);
-
-        const tr = document.createElement('div');
-        tr.className = 'corner-decor corner-top-right';
-        tr.innerHTML = '<div style="position:absolute; top:40px; right:40px; font-size:30px;">🔔</div>';
-        document.body.appendChild(tr);
-    }
 
     // Contact Form AJAX Handler & Modal Logic
     const contactForm = document.querySelector('form');
@@ -336,4 +293,80 @@ function closeImageModal() {
     const modal = document.getElementById('global-image-modal');
     if (modal) modal.style.display = 'none';
 }
+
+// Theme Manager Logic
+const ThemeManager = {
+    init() {
+        const savedTheme = localStorage.getItem('selectedTheme') || 'default';
+        this.setTheme(savedTheme);
+        this.createThemePanel();
+
+        document.addEventListener('click', (e) => {
+            const toggle = e.target.closest('.theme-panel-toggle');
+            const panel = document.querySelector('.theme-panel');
+            if (toggle) {
+                panel.classList.toggle('active');
+            } else if (panel && panel.classList.contains('active') && !e.target.closest('.theme-panel')) {
+                panel.classList.remove('active');
+            }
+        });
+    },
+
+    setTheme(themeName) {
+        document.documentElement.setAttribute('data-theme', themeName);
+        localStorage.setItem('selectedTheme', themeName);
+        this.updateActiveState(themeName);
+    },
+
+    updateActiveState(themeName) {
+        const options = document.querySelectorAll('.theme-option');
+        options.forEach(opt => {
+            if (opt.dataset.theme === themeName) {
+                opt.style.background = 'rgba(128,128,128, 0.1)';
+                opt.style.fontWeight = 'bold';
+            } else {
+                opt.style.background = 'transparent';
+                opt.style.fontWeight = 'normal';
+            }
+        });
+    },
+
+    createThemePanel() {
+        if (document.querySelector('.theme-panel')) return;
+
+        const container = document.createElement('div');
+        container.innerHTML = `
+            <div class="theme-panel-toggle" title="Mavzuni o'zgartirish">
+                <i class="fas fa-palette"></i>
+            </div>
+            <div class="theme-panel">
+                <h3>Mavzuni tanlang</h3>
+                <div class="theme-option" data-theme="default" onclick="ThemeManager.setTheme('default')">
+                    <div class="theme-preview" style="background: linear-gradient(135deg, #006400, #2E8B57)"></div>
+                    <span>Tabiat (Asosiy)</span>
+                </div>
+                <div class="theme-option" data-theme="modern-blue" onclick="ThemeManager.setTheme('modern-blue')">
+                    <div class="theme-preview" style="background: linear-gradient(135deg, #003366, #0056b3)"></div>
+                    <span>Zamonaviy Moviy</span>
+                </div>
+                <div class="theme-option" data-theme="sunset-orange" onclick="ThemeManager.setTheme('sunset-orange')">
+                    <div class="theme-preview" style="background: linear-gradient(135deg, #a04000, #d35400)"></div>
+                    <span>Quyosh Botishi</span>
+                </div>
+                <div class="theme-option" data-theme="dark-mode" onclick="ThemeManager.setTheme('dark-mode')">
+                    <div class="theme-preview" style="background: #121212; border-color: #fff"></div>
+                    <span>Tungi Rejim</span>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(container);
+
+        // Re-apply active state relative to newly created elements
+        const savedTheme = localStorage.getItem('selectedTheme') || 'default';
+        this.updateActiveState(savedTheme);
+    }
+};
+
+// Start ThemeManager
+ThemeManager.init();
 

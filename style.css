@@ -35,22 +35,8 @@ body {
 }
 
 /* Winter Theme - Snowfall */
-.snowflake {
-    position: fixed;
-    top: -10px;
-    z-index: 9999;
-    color: #fff;
-    font-size: 1em;
-    font-family: Arial;
-    text-shadow: 0 0 1px #000;
-    user-select: none;
-    cursor: default;
-    animation-name: snowflakes-fall, snowflakes-shake;
-    animation-duration: 10s, 3s;
-    animation-timing-function: linear, ease-in-out;
-    animation-iteration-count: infinite, infinite;
-    pointer-events: none;
-}
+/* Snowflake CSS Removed */
+
 
 @keyframes snowflakes-fall {
     0% {
@@ -76,85 +62,9 @@ body {
     }
 }
 
-/* Christmas Lights */
-.lights-strand {
-    position: fixed;
-    top: -5px;
-    left: 0;
-    width: 100%;
-    height: 15px;
-    z-index: 9998;
-    display: flex;
-    justify-content: space-evenly;
-    pointer-events: none;
-}
+/* Lights Removed */
 
-.light-bulb {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: #f00;
-    box-shadow: 0 2px 10px #f00;
-    animation: flash 2s infinite alternate;
-}
-
-.light-bulb:nth-child(2n) {
-    background: #0f0;
-    box-shadow: 0 2px 10px #0f0;
-    animation-delay: 0.5s;
-}
-
-.light-bulb:nth-child(3n) {
-    background: #ff0;
-    box-shadow: 0 2px 10px #ff0;
-    animation-delay: 1s;
-}
-
-.light-bulb:nth-child(4n) {
-    background: #00f;
-    box-shadow: 0 2px 10px #00f;
-    animation-delay: 1.5s;
-}
-
-@keyframes flash {
-    0% {
-        opacity: 0.4;
-        transform: scale(0.9);
-    }
-
-    100% {
-        opacity: 1;
-        transform: scale(1.1);
-        box-shadow: 0 4px 20px currentColor;
-    }
-}
-
-/* Corner Decorations */
-.corner-decor {
-    position: fixed;
-    width: 100px;
-    height: 100px;
-    z-index: 9997;
-    pointer-events: none;
-    background-repeat: no-repeat;
-    background-size: contain;
-}
-
-.corner-top-left {
-    top: 0;
-    left: 0;
-    background-image: radial-gradient(circle at 0 0, transparent 50%, #0f0 50%, #006400 70%);
-    border-radius: 0 0 100% 0;
-    opacity: 0.8;
-}
-
-.corner-top-right {
-    top: 0;
-    right: 0;
-    background-image: radial-gradient(circle at 100% 0, transparent 50%, #0f0 50%, #006400 70%);
-    border-radius: 0 0 0 100%;
-    opacity: 0.8;
-}
+/* Corner Decor Removed */
 
 /* Ticker Top Bar */
 .ticker-wrap {
@@ -955,6 +865,7 @@ footer {
         /* Use full width */
     }
 }
+
 /* Dynamic News Styles */
 .news-group-header {
     grid-column: 1 / -1;
@@ -1007,8 +918,9 @@ footer {
 /* News Detail Modal */
 .news-detail-modal {
     background-color: rgba(0, 0, 0, 0.8);
-    display: none; 
-    z-index: 30002; /* Higher than other modals */
+    display: none;
+    z-index: 30002;
+    /* Higher than other modals */
     position: fixed;
     top: 0;
     left: 0;
@@ -1028,7 +940,7 @@ footer {
     display: flex;
     flex-direction: column;
     max-height: 90vh;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     position: relative;
 }
 
@@ -1086,3 +998,139 @@ footer {
     background: #006699;
 }
 
+/* =========================================
+   Modern Theme System & Panel
+   ========================================= */
+
+/* Theme Variables Overrides */
+[data-theme="modern-blue"] {
+    --primary-color: #0056b3;
+    --secondary-color: #007bff;
+    --accent-color: #80bdff;
+    --dark-green: #003366;
+    --text-color: #333;
+    --light-bg: #f0f8ff;
+    --white: #ffffff;
+    --gradient-main: linear-gradient(135deg, #003366, #0056b3, #007bff);
+}
+
+[data-theme="dark-mode"] {
+    --primary-color: #bb86fc;
+    --secondary-color: #03dac6;
+    --accent-color: #3700b3;
+    --dark-green: #121212;
+    --text-color: #e0e0e0;
+    --light-bg: #121212;
+    --white: #1e1e1e;
+    --gradient-main: linear-gradient(135deg, #1f1f1f, #2c2c2c);
+    --shadow-sm: 0 2px 4px rgba(255, 255, 255, 0.05);
+    --shadow-md: 0 4px 6px rgba(255, 255, 255, 0.1);
+    --shadow-lg: 0 10px 15px rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="sunset-orange"] {
+    --primary-color: #d35400;
+    --secondary-color: #e67e22;
+    --accent-color: #f39c12;
+    --dark-green: #a04000;
+    --text-color: #4a235a;
+    --light-bg: #fdf2e9;
+    --white: #fff;
+    --gradient-main: linear-gradient(135deg, #a04000, #d35400, #e67e22);
+}
+
+/* Theme Panel Styles */
+.theme-panel-toggle {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 55px;
+    height: 55px;
+    background: var(--gradient-main);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    z-index: 20002;
+    transition: transform 0.3s, box-shadow 0.3s;
+    font-size: 1.5rem;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.theme-panel-toggle:hover {
+    transform: rotate(90deg) scale(1.1);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+.theme-panel {
+    position: fixed;
+    bottom: 100px;
+    right: 30px;
+    width: 260px;
+    background: rgba(255, 255, 255, 0.98);
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    transform: translateY(20px);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    z-index: 20002;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="dark-mode"] .theme-panel {
+    background: rgba(40, 40, 40, 0.98);
+    color: white;
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.theme-panel.active {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+}
+
+.theme-panel h3 {
+    margin: 0 0 15px;
+    font-size: 1rem;
+    font-weight: 700;
+    color: inherit;
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.theme-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    margin-bottom: 8px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1px solid transparent;
+}
+
+.theme-option:hover {
+    background: rgba(0, 0, 0, 0.05);
+    transform: translateX(5px);
+}
+
+[data-theme="dark-mode"] .theme-option:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.theme-preview {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2px solid white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}

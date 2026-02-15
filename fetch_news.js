@@ -59,6 +59,10 @@ async function fetchNews() {
 
         // Reverse to have newest first if they are not already
         // Telegram usually shows oldest to newest on the page, so we reverse
+        // Reverse to have newest first if they are not already
+        const sortedNews = news.reverse();
+        console.log(`Found ${sortedNews.length} news items.`);
+
         // Read existing news if file exists
         let existingNews = [];
         if (fs.existsSync(OUTPUT_FILE)) {
@@ -70,9 +74,7 @@ async function fetchNews() {
             }
         }
 
-        // Filter out duplicates (keep existing ones if ID matches, or prefer new ones? 
-        // Usually we prefer new ones if updated, but here IDs are static. 
-        // Let's filter new items that are NOT in existing.
+        // Filter out duplicates
         const newItems = sortedNews.filter(n => !existingNews.some(e => e.id === n.id));
 
         console.log(`New items found: ${newItems.length}`);
