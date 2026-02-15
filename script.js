@@ -213,7 +213,7 @@ function openNewsModal(newsId) {
 
     let imageHtml = '';
     if (news.image) {
-        imageHtml = `<img src="${news.image}" class="news-modal-img w-100 rounded mb-3" alt="Yangilik rasmi" style="max-height: 400px; object-fit: cover;">`;
+        imageHtml = `<img src="${news.image}" class="news-modal-img" alt="Yangilik rasmi">`;
     }
 
     modalBody.innerHTML = `

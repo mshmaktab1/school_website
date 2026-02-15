@@ -1053,3 +1053,24 @@ footer {
     border: 2px solid white;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
+
+/* News Detail Modal Refinements */
+#news-detail-modal .modal-dialog {
+    max-width: 600px;
+}
+
+#news-modal-body img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#news-modal-body {
+    padding: 25px;
+    text-align: center;
+    line-height: 1.6;
+}
