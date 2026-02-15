@@ -124,30 +124,29 @@ document.addEventListener('DOMContentLoaded', () => {
             news.forEach(item => {
                 const dateObj = new Date(item.date);
 
-                // 1. Grouping by Month Year (e.g., "2026-yil Fevral")
+                // 1. Grouping by Month Year
                 const groupKey = formatMonthYear(dateObj);
                 if (groupKey !== lastGroup) {
                     const groupHeader = document.createElement('div');
-                    groupHeader.className = 'news-group-header';
-                    groupHeader.innerHTML = `<h3><i class="far fa-calendar-check"></i> ${groupKey}</h3>`;
+                    groupHeader.className = 'col-12 mt-4 mb-2';
+                    groupHeader.innerHTML = `<h3 class="border-bottom border-primary pb-2 text-primary fs-5 text-uppercase"><i class="far fa-calendar-check"></i> ${groupKey}</h3>`;
                     container.appendChild(groupHeader);
                     lastGroup = groupKey;
                 }
 
-                const card = document.createElement('div');
-                card.className = 'card news-card-interactive';
-                // Remove toggleNewsExpand to use Modal instead, or keep it but clicking read-more opens modal
-                // card.onclick = () => toggleNewsExpand(card); 
+                const col = document.createElement('div');
+                col.className = 'col-md-6 col-lg-4';
 
-                // 2. Format Date (e.g., "15-fevral, 2026")
+                const card = document.createElement('div');
+                card.className = 'card h-100 shadow-sm border-0 news-card-interactive';
+
+                // 2. Format Date
                 const dateStr = formatUzbekDate(dateObj);
 
                 let imageHtml = '';
                 if (item.image) {
                     imageHtml = `
-                        <div class="news-image-container">
-                             <img src="${item.image}" alt="Yangilik rasmi" loading="lazy">
-                        </div>
+                         <img src="${item.image}" class="card-img-top" alt="Yangilik rasmi" loading="lazy" style="height: 200px; object-fit: cover;">
                     `;
                 }
 
@@ -156,22 +155,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 card.innerHTML = `
                     ${imageHtml}
-                    <div class="card-content">
-                        <span class="card-date"><i class="far fa-clock"></i> ${dateStr}</span>
-                        <p class="news-text">${shortText}</p>
-                        <button class="read-more-btn" onclick="openNewsModal('${item.id.replace(/'/g, "\\'")}')">
+                    <div class="card-body d-flex flex-column">
+                        <span class="text-muted small mb-2"><i class="far fa-clock"></i> ${dateStr}</span>
+                        <p class="card-text flex-grow-1">${shortText}</p>
+                        <button class="btn btn-outline-primary btn-sm mt-auto align-self-start" onclick="openNewsModal('${item.id.replace(/'/g, "\\'")}')">
                             Batafsil o'qish <i class="fas fa-arrow-right"></i>
                         </button>
                     </div>
                 `;
 
-                container.appendChild(card);
+                col.appendChild(card);
+                container.appendChild(col);
             });
 
         } catch (error) {
             console.error('Error loading news:', error);
-            container.innerHTML = `<p class="error-msg" style="text-align: center; grid-column: 1/-1; color: red;">Xatolik yuz berdi: ${error.message}</p>`;
-            alert("Yangiliklarni yuklashda xatolik: " + error.message);
+            container.innerHTML = `<div class="col-12"><div class="alert alert-danger">Xatolik yuz berdi: ${error.message}</div></div>`;
+            // alert removed to be less intrusive
         }
     }
 });
@@ -295,75 +295,34 @@ function closeImageModal() {
 }
 
 // Theme Manager Logic
+// Theme Manager for Bootstrap
 const ThemeManager = {
+    // CDN Map for Themes
+    themes: {
+        'default': 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css',
+        'cerulean': 'https://cdn.jsdelivr.net/npm/bootswatch@5.3.2/dist/cerulean/bootstrap.min.css',
+        'cosmo': 'https://cdn.jsdelivr.net/npm/bootswatch@5.3.2/dist/cosmo/bootstrap.min.css',
+        'darkly': 'https://cdn.jsdelivr.net/npm/bootswatch@5.3.2/dist/darkly/bootstrap.min.css',
+        'united': 'https://cdn.jsdelivr.net/npm/bootswatch@5.3.2/dist/united/bootstrap.min.css'
+    },
+
     init() {
         const savedTheme = localStorage.getItem('selectedTheme') || 'default';
-        this.setTheme(savedTheme);
-        this.createThemePanel();
-
-        document.addEventListener('click', (e) => {
-            const toggle = e.target.closest('.theme-panel-toggle');
-            const panel = document.querySelector('.theme-panel');
-            if (toggle) {
-                panel.classList.toggle('active');
-            } else if (panel && panel.classList.contains('active') && !e.target.closest('.theme-panel')) {
-                panel.classList.remove('active');
-            }
-        });
+        this.setTheme(savedTheme, false); // false = don't save again on init
     },
 
-    setTheme(themeName) {
-        document.documentElement.setAttribute('data-theme', themeName);
-        localStorage.setItem('selectedTheme', themeName);
-        this.updateActiveState(themeName);
-    },
+    setTheme(themeName, save = true) {
+        const themeUrl = this.themes[themeName];
+        if (!themeUrl) return;
 
-    updateActiveState(themeName) {
-        const options = document.querySelectorAll('.theme-option');
-        options.forEach(opt => {
-            if (opt.dataset.theme === themeName) {
-                opt.style.background = 'rgba(128,128,128, 0.1)';
-                opt.style.fontWeight = 'bold';
-            } else {
-                opt.style.background = 'transparent';
-                opt.style.fontWeight = 'normal';
-            }
-        });
-    },
+        const themeLink = document.getElementById('theme-css');
+        if (themeLink) {
+            themeLink.href = themeUrl;
+        }
 
-    createThemePanel() {
-        if (document.querySelector('.theme-panel')) return;
-
-        const container = document.createElement('div');
-        container.innerHTML = `
-            <div class="theme-panel-toggle" title="Mavzuni o'zgartirish">
-                <i class="fas fa-palette"></i>
-            </div>
-            <div class="theme-panel">
-                <h3>Mavzuni tanlang</h3>
-                <div class="theme-option" data-theme="default" onclick="ThemeManager.setTheme('default')">
-                    <div class="theme-preview" style="background: linear-gradient(135deg, #006400, #2E8B57)"></div>
-                    <span>Tabiat (Asosiy)</span>
-                </div>
-                <div class="theme-option" data-theme="modern-blue" onclick="ThemeManager.setTheme('modern-blue')">
-                    <div class="theme-preview" style="background: linear-gradient(135deg, #003366, #0056b3)"></div>
-                    <span>Zamonaviy Moviy</span>
-                </div>
-                <div class="theme-option" data-theme="sunset-orange" onclick="ThemeManager.setTheme('sunset-orange')">
-                    <div class="theme-preview" style="background: linear-gradient(135deg, #a04000, #d35400)"></div>
-                    <span>Quyosh Botishi</span>
-                </div>
-                <div class="theme-option" data-theme="dark-mode" onclick="ThemeManager.setTheme('dark-mode')">
-                    <div class="theme-preview" style="background: #121212; border-color: #fff"></div>
-                    <span>Tungi Rejim</span>
-                </div>
-            </div>
-        `;
-        document.body.appendChild(container);
-
-        // Re-apply active state relative to newly created elements
-        const savedTheme = localStorage.getItem('selectedTheme') || 'default';
-        this.updateActiveState(savedTheme);
+        if (save) {
+            localStorage.setItem('selectedTheme', themeName);
+        }
     }
 };
 
