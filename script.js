@@ -213,7 +213,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         } catch (error) {
             console.error('Error loading news:', error);
-            container.innerHTML = '<p class="error-msg" style="text-align: center; grid-column: 1/-1;">Yangiliklarni yuklashda xatolik yuz berdi.</p>';
+            container.innerHTML = `<p class="error-msg" style="text-align: center; grid-column: 1/-1; color: red;">Xatolik yuz berdi: ${error.message}</p>`;
+            alert("Yangiliklarni yuklashda xatolik: " + error.message);
         }
     }
 });
