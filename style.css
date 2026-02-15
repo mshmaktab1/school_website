@@ -337,76 +337,7 @@ footer {
     text-decoration: underline;
 }
 
-/* News Detail Modal */
-.news-detail-modal {
-    background-color: rgba(0, 0, 0, 0.8);
-    display: none;
-    /* Hidden by default */
-}
 
-.news-modal-content {
-    background: white;
-    width: 95%;
-    max-width: 800px;
-    border-radius: 12px;
-    padding: 0;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    max-height: 90vh;
-}
-
-.news-modal-img {
-    width: 100%;
-    height: auto;
-    max-height: 300px;
-    object-fit: cover;
-    display: block;
-}
-
-.news-modal-meta {
-    padding: 1rem 1.5rem 0.5rem;
-    color: #666;
-    font-size: 0.9rem;
-    border-bottom: 1px solid #eee;
-}
-
-.news-modal-text {
-    padding: 1.5rem;
-    overflow-y: auto;
-    font-size: 1rem;
-    line-height: 1.7;
-    color: #333;
-}
-
-.news-modal-text img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 8px;
-    margin: 10px 0;
-}
-
-.news-modal-footer {
-    padding: 1rem 1.5rem;
-    background: #f9f9f9;
-    border-top: 1px solid #eee;
-    text-align: right;
-}
-
-.telegram-link-btn {
-    display: inline-block;
-    background: #0088cc;
-    color: white;
-    text-decoration: none;
-    padding: 0.5rem 1rem;
-    border-radius: 5px;
-    font-weight: 500;
-    transition: background 0.3s;
-}
-
-.telegram-link-btn:hover {
-    background: #006699;
-}
 
 /* Image Modal Gallery */
 .image-modal {
@@ -839,238 +770,260 @@ footer {
     text-decoration: underline;
 }
 
-/* News Detail Modal */
-.news-detail-modal {
-    background-color: rgba(0, 0, 0, 0.8);
+/* News Detail Modal - Refined UI/UX with Transitions */
+#news-detail-modal {
+    z-index: 10000;
+}
+
+#news-detail-modal .modal-dialog {
+    max-width: 900px;
+    margin: 1.75rem auto;
+    transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), opacity 0.4s ease-out;
+}
+
+#news-detail-modal .modal-content {
+    border: none;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+    background: #fff;
+}
+
+/* ==================== CUSTOM MODAL (VARIANT 2) ==================== */
+
+/* Modal overlay (orqa qora fon) */
+.custom-modal-overlay {
     display: none;
-    z-index: 30002;
-    /* Higher than other modals */
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    align-items: center;
-    justify-content: center;
+    background: rgba(0, 0, 0, 0.75);
+    z-index: 9998;
+    animation: fadeIn 0.3s ease;
 }
 
-.news-modal-content {
-    background: white;
-    width: 95%;
-    max-width: 800px;
-    border-radius: 12px;
-    padding: 0;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    max-height: 90vh;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    position: relative;
-}
-
-.news-modal-img {
-    width: 100%;
-    height: auto;
-    max-height: 300px;
-    object-fit: cover;
+.custom-modal-overlay.active {
     display: block;
 }
 
-.news-modal-meta {
-    padding: 1rem 1.5rem 0.5rem;
-    color: #666;
-    font-size: 0.9rem;
-    border-bottom: 1px solid #eee;
-    display: flex;
-    gap: 1rem;
-}
-
-.news-modal-text {
-    padding: 1.5rem;
-    overflow-y: auto;
-    font-size: 1rem;
-    line-height: 1.7;
-    color: #333;
-}
-
-.news-modal-text img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 8px;
-    margin: 10px 0;
-}
-
-.news-modal-footer {
-    padding: 1rem 1.5rem;
-    background: #f9f9f9;
-    border-top: 1px solid #eee;
-    text-align: right;
-}
-
-.telegram-link-btn {
-    display: inline-block;
-    background: #0088cc;
-    color: white;
-    text-decoration: none;
-    padding: 0.5rem 1rem;
-    border-radius: 5px;
-    font-weight: 500;
-    transition: background 0.3s;
-}
-
-.telegram-link-btn:hover {
-    background: #006699;
-}
-
-/* =========================================
-   Modern Theme System & Panel
-   ========================================= */
-
-/* Theme Variables Overrides */
-[data-theme="modern-blue"] {
-    --primary-color: #0056b3;
-    --secondary-color: #007bff;
-    --accent-color: #80bdff;
-    --dark-green: #003366;
-    --text-color: #333;
-    --light-bg: #f0f8ff;
-    --white: #ffffff;
-    --gradient-main: linear-gradient(135deg, #003366, #0056b3, #007bff);
-}
-
-[data-theme="dark-mode"] {
-    --primary-color: #bb86fc;
-    --secondary-color: #03dac6;
-    --accent-color: #3700b3;
-    --dark-green: #121212;
-    --text-color: #e0e0e0;
-    --light-bg: #121212;
-    --white: #1e1e1e;
-    --gradient-main: linear-gradient(135deg, #1f1f1f, #2c2c2c);
-    --shadow-sm: 0 2px 4px rgba(255, 255, 255, 0.05);
-    --shadow-md: 0 4px 6px rgba(255, 255, 255, 0.1);
-    --shadow-lg: 0 10px 15px rgba(255, 255, 255, 0.1);
-}
-
-[data-theme="sunset-orange"] {
-    --primary-color: #d35400;
-    --secondary-color: #e67e22;
-    --accent-color: #f39c12;
-    --dark-green: #a04000;
-    --text-color: #4a235a;
-    --light-bg: #fdf2e9;
-    --white: #fff;
-    --gradient-main: linear-gradient(135deg, #a04000, #d35400, #e67e22);
-}
-
-/* Theme Panel Styles */
-/* Toggle is now in Nav */
-
-.theme-panel {
+/* Modal o'zi */
+.custom-modal {
+    display: none;
     position: fixed;
-    top: 80px;
-    right: 20px;
-    width: 260px;
-    background: rgba(255, 255, 255, 0.98);
-    border-radius: 12px;
-    padding: 20px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-    transform: translateY(-10px);
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-    z-index: 20002;
-    border: 1px solid rgba(0, 0, 0, 0.05);
-}
-
-/* Nav Item styling */
-.theme-nav-item a {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    cursor: pointer;
-    background: rgba(255, 255, 255, 0.1);
-    padding: 5px 12px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.9);
+    width: 95%;
+    max-width: 1200px;
+    max-height: 92vh;
+    background: white;
     border-radius: 20px;
-    transition: background 0.3s;
+    overflow: hidden;
+    z-index: 9999;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4);
+    animation: modalAppear 0.3s ease forwards;
 }
 
-.theme-nav-item a:hover {
-    background: rgba(255, 255, 255, 0.25);
-    color: var(--white);
+.custom-modal.active {
+    display: block;
 }
 
+/* Animatsiyalar */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
 
-[data-theme="dark-mode"] .theme-panel {
-    background: rgba(40, 40, 40, 0.98);
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes modalAppear {
+    from {
+        transform: translate(-50%, -50%) scale(0.9);
+        opacity: 0;
+    }
+
+    to {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
+}
+
+/* Modal Header */
+.custom-modal-header {
+    padding: 1.5rem 2rem;
+    background: var(--gradient-main);
     color: white;
-    border-color: rgba(255, 255, 255, 0.1);
-}
-
-.theme-panel.active {
-    transform: translateY(0);
-    opacity: 1;
-    visibility: visible;
-}
-
-.theme-panel h3 {
-    margin: 0 0 15px;
-    font-size: 1rem;
-    font-weight: 700;
-    color: inherit;
-    border-bottom: 2px solid var(--primary-color);
-    padding-bottom: 8px;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.theme-option {
+.custom-modal-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.custom-modal-close {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 1.8rem;
+    cursor: pointer;
+    padding: 0;
+    width: 32px;
+    height: 32px;
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 12px;
-    margin-bottom: 8px;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: all 0.2s;
-    border: 1px solid transparent;
-}
-
-.theme-option:hover {
-    background: rgba(0, 0, 0, 0.05);
-    transform: translateX(5px);
-}
-
-[data-theme="dark-mode"] .theme-option:hover {
-    background: rgba(255, 255, 255, 0.1);
-}
-
-.theme-preview {
-    width: 24px;
-    height: 24px;
+    justify-content: center;
     border-radius: 50%;
-    border: 2px solid white;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: background 0.3s ease;
 }
 
-/* News Detail Modal Refinements */
-#news-detail-modal .modal-dialog {
-    max-width: 600px;
+.custom-modal-close:hover {
+    background: rgba(255, 255, 255, 0.2);
 }
 
-#news-modal-body img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
+/* Modal Body - Landscape Layout */
+.custom-modal-body {
+    display: flex;
+    height: calc(92vh - 70px);
+    max-height: 700px;
 }
 
-#news-modal-body {
-    padding: 25px;
-    text-align: center;
-    line-height: 1.6;
+/* Rasm container - Chap tomon (50%) */
+.modal-image-side {
+    flex: 0 0 50%;
+    background: var(--gradient-main);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.modal-image-side img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Matn container - O'ng tomon (50%) */
+.modal-text-side {
+    flex: 0 0 50%;
+    padding: 2rem 2.5rem;
+    overflow-y: auto;
+    background: white;
+}
+
+.modal-text-side h3 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #2d3748;
+    margin-bottom: 1.25rem;
+    line-height: 1.4;
+}
+
+.modal-text-side .content {
+    font-size: 0.925rem;
+    line-height: 1.7;
+    color: #4a5568;
+}
+
+.modal-text-side .content p {
+    margin-bottom: 1rem;
+}
+
+/* Hashteglar */
+.modal-hashtags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e2e8f0;
+}
+
+.modal-hashtag {
+    display: inline-block;
+    padding: 0.4rem 0.9rem;
+    background: #edf2f7;
+    color: var(--primary-color);
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.modal-hashtag:hover {
+    background: var(--primary-color);
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* Scrollbar */
+.modal-text-side::-webkit-scrollbar {
+    width: 6px;
+}
+
+.modal-text-side::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.modal-text-side::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 10px;
+}
+
+/* ==================== MOBIL (768px dan kichik) ==================== */
+@media (max-width: 768px) {
+    .custom-modal {
+        width: 100%;
+        max-width: 100%;
+        max-height: 95vh;
+        top: auto;
+        bottom: 0;
+        left: 0;
+        transform: translateY(100%);
+        border-radius: 25px 25px 0 0;
+    }
+
+    .custom-modal.active {
+        transform: translateY(0);
+        left: 0;
+    }
+
+    @keyframes modalAppear {
+        from {
+            transform: translateY(100%);
+            opacity: 1;
+        }
+
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .custom-modal-body {
+        flex-direction: column;
+        height: calc(95vh - 70px);
+        max-height: none;
+    }
+
+    .modal-image-side {
+        flex: 0 0 250px;
+        min-height: 250px;
+    }
+
+    .modal-text-side {
+        flex: 1;
+        padding: 1.75rem 1.5rem;
+    }
 }

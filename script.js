@@ -158,7 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="card-body d-flex flex-column">
                         <span class="text-muted small mb-2"><i class="far fa-clock"></i> ${dateStr}</span>
                         <p class="card-text flex-grow-1">${shortText}</p>
-                        <button class="btn btn-outline-primary btn-sm mt-auto align-self-start" onclick="openNewsModal('${item.id.replace(/'/g, "\\'")}')">
+                        <button class="btn btn-outline-primary btn-sm mt-auto align-self-start" onclick="openModal('${item.id.replace(/'/g, "\\'")}')">
                             Batafsil o'qish <i class="fas fa-arrow-right"></i>
                         </button>
                     </div>
@@ -197,44 +197,81 @@ function formatMonthYear(date) {
     return `${date.getFullYear()}-yil ${months[date.getMonth()]}`;
 }
 
-// News Modal Logic
-function openNewsModal(newsId) {
+// ==================== CUSTOM MODAL LOGIC (VARIANT 2) ====================
+
+function openModal(newsId) {
     const news = window.globalNewsData.find(n => n.id === newsId);
     if (!news) return;
 
-    const modalElement = document.getElementById('news-detail-modal');
-    if (!modalElement) return;
+    // Elementlarni olish
+    const modal = document.getElementById('customModal');
+    const overlay = document.getElementById('modalOverlay');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalHeading = document.getElementById('modalHeading');
+    const modalImage = document.getElementById('modalImage');
+    const modalContent = document.getElementById('modalContent');
+    const modalHashtags = document.getElementById('modalHashtags');
 
-    const modalBody = document.getElementById('news-modal-body');
-    const dateStr = formatUzbekDate(new Date(news.date));
+    // Extract hashtags and clean text
+    const hashtags = news.text.match(/#[a-zA-Z0-9_]+/g) || [];
+    const cleanText = news.text.replace(/#[a-zA-Z0-9_]+/g, '').trim();
 
-    // Prefer HTML content if available (from scraper), else plain text
-    let content = news.html || news.text.replace(/\n/g, '<br>');
-
-    let imageHtml = '';
-    if (news.image) {
-        imageHtml = `<img src="${news.image}" class="news-modal-img" alt="Yangilik rasmi">`;
+    // Extract title
+    let newsTitle = 'Yangilik Tafsilotlari';
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = news.html || news.text;
+    const firstBold = tempDiv.querySelector('b');
+    if (firstBold) {
+        newsTitle = firstBold.innerText;
+    } else if (cleanText) {
+        const lines = cleanText.split('\n').filter(l => l.trim().length > 0);
+        if (lines.length > 0) newsTitle = lines[0].substring(0, 100);
     }
 
-    modalBody.innerHTML = `
-        ${imageHtml}
-        <div class="news-modal-meta mb-3">
-            <span class="text-muted"><i class="far fa-calendar-alt"></i> ${dateStr}</span>
-        </div>
-        <div class="news-modal-text">
-            ${content}
-        </div>
-        <div class="news-modal-footer mt-4 border-top pt-3">
-            <a href="https://t.me/${news.id.split('/')[0] || 'channel'}/${news.id.split('/')[1] || ''}" target="_blank" class="btn btn-primary w-100">
-                <i class="fab fa-telegram"></i> Telegramda ko'rish
-            </a>
-        </div>
-    `;
+    let contentHtml = (news.html || news.text.replace(/\n/g, '<br>')).replace(/#[a-zA-Z0-9_]+/g, '');
 
-    const bsModal = new bootstrap.Modal(modalElement);
-    bsModal.show();
-    console.log('Modal opened for:', newsId);
+    // Kontentni o'rnatish
+    modalTitle.textContent = 'Yangilik Tafsilotlari';
+    modalHeading.textContent = newsTitle;
+    modalImage.src = news.image || '';
+    modalImage.alt = newsTitle;
+    modalContent.innerHTML = contentHtml;
+
+    // Hashteglarni qo'shish
+    if (hashtags.length > 0) {
+        modalHashtags.innerHTML = hashtags.map(tag =>
+            `<a href="#" class="modal-hashtag" onclick="event.preventDefault();">${tag}</a>`
+        ).join('');
+        modalHashtags.style.display = 'flex';
+    } else {
+        modalHashtags.style.display = 'none';
+    }
+
+    // Modalni ko'rsatish
+    overlay.classList.add('active');
+    modal.classList.add('active');
+
+    // Body scroll ni to'xtatish
+    document.body.style.overflow = 'hidden';
 }
+
+function closeModal() {
+    const modal = document.getElementById('customModal');
+    const overlay = document.getElementById('modalOverlay');
+
+    if (modal) modal.classList.remove('active');
+    if (overlay) overlay.classList.remove('active');
+
+    // Body scroll ni qaytarish
+    document.body.style.overflow = '';
+}
+
+// ESC tugmasi bilan yopish
+document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape') {
+        closeModal();
+    }
+});
 
 // Global functions for News Interaction
 function toggleNewsExpand(card) {

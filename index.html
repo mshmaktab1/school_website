@@ -143,18 +143,22 @@
         </div>
     </footer>
 
-    <!-- News Detail Modal Structure -->
-    <div class="modal fade" id="news-detail-modal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content"
-                style="border-radius: 15px; border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
-                <div class="modal-header" style="background-color: #f8f9fa; border-bottom: 1px solid #eee;">
-                    <h5 class="modal-title" style="font-weight: bold; color: #333;">Yangilik Tafsilotlari</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body" id="news-modal-body" style="background-color: #fff;">
-                    <!-- Content injected via JS -->
-                </div>
+    <!-- MODAL STRUKTURA -->
+    <div class="custom-modal-overlay" id="modalOverlay" onclick="closeModal()"></div>
+
+    <div class="custom-modal" id="customModal">
+        <div class="custom-modal-header">
+            <h5 class="custom-modal-title" id="modalTitle">Yangilik Tafsilotlari</h5>
+            <button class="custom-modal-close" onclick="closeModal()">×</button>
+        </div>
+        <div class="custom-modal-body">
+            <div class="modal-image-side">
+                <img id="modalImage" src="" alt="Yangilik rasmi">
+            </div>
+            <div class="modal-text-side">
+                <h3 id="modalHeading"></h3>
+                <div class="content" id="modalContent"></div>
+                <div class="modal-hashtags" id="modalHashtags"></div>
             </div>
         </div>
     </div>
