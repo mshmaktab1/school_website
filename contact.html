@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aloqa - 1-Maktab</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .contact-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: center;
+        }
+
+        .contact-info,
+        .contact-form {
+            flex: 1;
+            min-width: 300px;
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .info-item i {
+            width: 40px;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        form input,
+        form textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        form button {
+            background: var(--gradient-main);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: opacity 0.3s;
+        }
+
+        form button:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header>
+        <!-- Ticker -->
+        <div class="ticker-wrap">
+            <div class="ticker">
+                DIQQAT! Sayt hozirda test rejimida ishlamoqda.
+            </div>
+        </div>
+
+        <!-- Branding Section -->
+        <div class="branding-bar">
+            <!-- 1. Ministry Links (TOP) -->
+            <div class="ministry-links">
+                <div class="ministry-item">
+                    <img src="logo_min.png" alt="Gerb">
+                    <span>O‘zbekiston Respublikasi maktabgacha va maktab ta'limi vazirligi</span>
+                </div>
+            </div>
+
+            <!-- 2. School Identity (BOTTOM) -->
+            <div class="school-identity">
+                <!-- Force Inline Logo Size -->
+                <img src="logo.png" alt="Maktab Logosi" class="school-logo"
+                    style="width: 50px !important; height: 50px !important;">
+                <div class="school-name">
+                    <h1>Marg'ilon shahar 1-umumiy o'rta ta'lim maktabi</h1>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <nav>
+            <div class="nav-container">
+                <div class="menu-toggle" id="mobile-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="index.html">Bosh Sahifa</a></li>
+                     <li><a href="about.html">Maktab haqida</a></li>
+                    <li><a href="statistics.html">Statistika</a></li>
+                    <li><a href="achievements.html">Yutuqlar</a></li>
+                    <li><a href="contact.html" class="active">Aloqa</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <section>
+        <h2 class="section-title">Biz bilan bog'laning</h2>
+        <div class="contact-container">
+            <div class="contact-info">
+                <h3>Manzil</h3>
+                <br>
+                <div class="info-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <p>Fargʻona viloyati, Margʻilon shahar, "Miltiqsoz" MFY Burhoniddin Al-Margʻinoniy koʻchasi 77-uy
+                    </p>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-phone"></i>
+                    <p>+998902316561</p>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-envelope"></i>
+                    <p>mshmaktab1@gmail.com</p>
+                </div>
+                <!-- Map Placeholder -->
+                <div class="map-container">
+                    <iframe
+                        src="https://maps.google.com/maps?q=40.475972197809256,71.73496746197124+(Marg'ilon+shahar+1-maktab)&t=&z=19&ie=UTF8&iwloc=&output=embed"
+                        width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+            </div>
+
+            <div class="contact-form">
+                <h3>Xabar yuborish</h3>
+                <br>
+                <!-- Formspree yordamida emailga xabar yuborish -->
+                <!-- DIQQAT: Saytni yuklagandan keyin birinchi marta o'zingiz test xabarini yuboring va emailni tasdiqlang -->
+                <form action="https://formspree.io/f/mjgvaojg" method="POST">
+                    <input type="text" name="name" placeholder="Ismingiz" required>
+                    <input type="email" name="email" placeholder="Email manzilingiz" required>
+                    <textarea name="message" rows="5" placeholder="Xabaringiz..." required></textarea>
+
+                    <!-- Hidden Reference Number Field -->
+                    <input type="hidden" name="murojaat_raqami" id="hiddenRefNum">
+
+                    <!-- Spamdan himoya -->
+                    <input type="text" name="_gotcha" style="display:none !important">
+
+                    <button type="submit">Email va Telegramga Yuborish <i class="fas fa-paper-plane"></i></button>
+                    <p style="font-size: 0.8rem; margin-top: 10px; color: #666;">* Xabar emailingizga boradi.</p>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <!-- Branding (Left) -->
+            <div class="footer-brand">
+                <h2>1-MAKTAB</h2>
+                <p>Marg'ilon shahar 1-umumiy<br>o'rta ta'lim maktabi</p>
+            </div>
+
+            <!-- Social Media (Center) -->
+            <div class="footer-social">
+                <div class="social-media">
+                    <!-- Row 1 -->
+                    <a href="https://t.me/mshmaktab1" target="_blank" class="social-item">
+                        <i class="fab fa-telegram"></i> <span>Telegram</span>
+                    </a>
+                    <a href="https://www.youtube.com/@mshmaktab1" target="_blank" class="social-item">
+                        <i class="fab fa-youtube"></i> <span>YouTube</span>
+                    </a>
+                    <!-- Row 2 -->
+                    <a href="https://www.facebook.com/profile.php?id=61582267918442" target="_blank"
+                        class="social-item">
+                        <i class="fab fa-facebook"></i> <span>Facebook</span>
+                    </a>
+                    <a href="https://www.instagram.com/mshmaktab1/" target="_blank" class="social-item">
+                        <i class="fab fa-instagram"></i> <span>Instagram</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- QR Code (Right) -->
+            <div class="footer-qr">
+                <span class="qr-label">Sahifani telefonda ko'rish</span>
+                <div class="qr-section">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://mshmaktab1.netlify.app"
+                        alt="QR Code">
+                </div>
+            </div>
+
+            <div class="copyright">
+                <p>&copy; 2025 Marg'ilon shahar 1-umumiy o'rta ta'lim maktabi. Barcha huquqlar himoyalangan.</p>
+
+            </div>
+        </div>
+    </footer>
+
+    <!-- Success Modal -->
+    <div id="success-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <i class="fas fa-check-circle"
+                style="color: var(--primary-color); font-size: 3rem; margin-bottom: 1rem;"></i>
+            <h3>Xabar Yuborildi!</h3>
+            <p id="modal-message"></p>
+            <div class="progress-bar">
+                <div class="progress" id="modal-progress"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

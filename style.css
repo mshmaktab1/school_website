@@ -1,0 +1,874 @@
+:root {
+    --primary-color: #2E8B57;
+    /* SeaGreen */
+    --secondary-color: #3CB371;
+    /* MediumSeaGreen */
+    --accent-color: #98FB98;
+    /* PaleGreen */
+    --dark-green: #006400;
+    /* DarkGreen */
+    --text-color: #333;
+    --light-bg: #f9fdf9;
+    --white: #ffffff;
+    --gradient-main: linear-gradient(135deg, var(--dark-green), var(--primary-color), var(--secondary-color));
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: var(--light-bg);
+    color: var(--text-color);
+    line-height: 1.6;
+    overflow-x: hidden;
+    /* Prevent horizontal scroll from snow */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Winter Theme - Snowfall */
+.snowflake {
+    position: fixed;
+    top: -10px;
+    z-index: 9999;
+    color: #fff;
+    font-size: 1em;
+    font-family: Arial;
+    text-shadow: 0 0 1px #000;
+    user-select: none;
+    cursor: default;
+    animation-name: snowflakes-fall, snowflakes-shake;
+    animation-duration: 10s, 3s;
+    animation-timing-function: linear, ease-in-out;
+    animation-iteration-count: infinite, infinite;
+    pointer-events: none;
+}
+
+@keyframes snowflakes-fall {
+    0% {
+        top: -10%;
+    }
+
+    100% {
+        top: 100%;
+    }
+}
+
+@keyframes snowflakes-shake {
+    0% {
+        transform: translateX(0px);
+    }
+
+    50% {
+        transform: translateX(80px);
+    }
+
+    100% {
+        transform: translateX(0px);
+    }
+}
+
+/* Christmas Lights */
+.lights-strand {
+    position: fixed;
+    top: -5px;
+    left: 0;
+    width: 100%;
+    height: 15px;
+    z-index: 9998;
+    display: flex;
+    justify-content: space-evenly;
+    pointer-events: none;
+}
+
+.light-bulb {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #f00;
+    box-shadow: 0 2px 10px #f00;
+    animation: flash 2s infinite alternate;
+}
+
+.light-bulb:nth-child(2n) {
+    background: #0f0;
+    box-shadow: 0 2px 10px #0f0;
+    animation-delay: 0.5s;
+}
+
+.light-bulb:nth-child(3n) {
+    background: #ff0;
+    box-shadow: 0 2px 10px #ff0;
+    animation-delay: 1s;
+}
+
+.light-bulb:nth-child(4n) {
+    background: #00f;
+    box-shadow: 0 2px 10px #00f;
+    animation-delay: 1.5s;
+}
+
+@keyframes flash {
+    0% {
+        opacity: 0.4;
+        transform: scale(0.9);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1.1);
+        box-shadow: 0 4px 20px currentColor;
+    }
+}
+
+/* Corner Decorations */
+.corner-decor {
+    position: fixed;
+    width: 100px;
+    height: 100px;
+    z-index: 9997;
+    pointer-events: none;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.corner-top-left {
+    top: 0;
+    left: 0;
+    background-image: radial-gradient(circle at 0 0, transparent 50%, #0f0 50%, #006400 70%);
+    border-radius: 0 0 100% 0;
+    opacity: 0.8;
+}
+
+.corner-top-right {
+    top: 0;
+    right: 0;
+    background-image: radial-gradient(circle at 100% 0, transparent 50%, #0f0 50%, #006400 70%);
+    border-radius: 0 0 0 100%;
+    opacity: 0.8;
+}
+
+/* Ticker Top Bar */
+.ticker-wrap {
+    background: #ffff00;
+    /* Yellow Background */
+    color: #ff0000;
+    /* Red Text */
+    font-weight: bold;
+    font-size: 0.85rem;
+    /* Resized smaller */
+    padding: 5px 0;
+    /* Resized smaller */
+    overflow: hidden;
+    border-bottom: 2px solid #e6b800;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.ticker {
+    white-space: nowrap;
+    animation: ticker 20s linear infinite;
+    display: inline-block;
+    padding-left: 100%;
+}
+
+@keyframes ticker {
+    0% {
+        transform: translate3d(0, 0, 0);
+    }
+
+    100% {
+        transform: translate3d(-100%, 0, 0);
+    }
+}
+
+/* Header & Navigation */
+header {
+    background: var(--gradient-main);
+    color: var(--white);
+    padding: 0;
+    position: relative;
+    /* Changed from sticky to relative allow scrolling */
+    z-index: 20000;
+    box-shadow: var(--shadow-md);
+}
+
+/* Branding Bar */
+.branding-bar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    background: transparent;
+}
+
+.ministry-links {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 0.2rem;
+    /* Closer to school name */
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--white);
+}
+
+.ministry-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: inherit;
+    transition: color 0.3s;
+}
+
+.ministry-item img {
+    height: 30px;
+    /* Force small size as requested */
+    width: auto;
+}
+
+.ministry-item:hover {
+    color: var(--primary-color);
+}
+
+.school-identity {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    /* More space between logo and text */
+    flex-wrap: nowrap;
+    /* Force single line */
+}
+
+.school-logo {
+    /* Dimensions handled inline or via utility, but forcing reset here */
+    object-fit: contain;
+}
+
+.school-name h1 {
+    font-size: 1rem;
+    /* Adjustable baseline */
+    font-weight: 800;
+    text-transform: uppercase;
+    color: var(--white);
+    margin: 0;
+    line-height: 1.2;
+    text-align: left;
+    white-space: nowrap;
+    /* Force text to stay on one line */
+}
+
+nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+.nav-links li a {
+    color: var(--white);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.nav-links li a:hover {
+    color: var(--accent-color);
+}
+
+.menu-toggle {
+    display: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+/* Hero Section */
+.hero {
+    background: var(--gradient-main);
+    color: var(--white);
+    text-align: center;
+    padding: 4rem 1rem 6rem;
+    clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+}
+
+.hero h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.hero p {
+    font-size: 1.2rem;
+    max-width: 600px;
+    margin: 0 auto;
+    opacity: 0.9;
+}
+
+/* Sections General */
+section {
+    padding: 3rem 5%;
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: var(--dark-green);
+    font-size: 2rem;
+}
+
+/* News Cards */
+.news-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+/* News Marquee Styles */
+.card {
+    background: var(--white);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.4s ease;
+    /* Smoother transition */
+    border-left: 5px solid var(--primary-color);
+    position: relative;
+    cursor: pointer;
+    /* Indicate clickable */
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+.news-card-interactive.expanded {
+    grid-column: span 1;
+    /* Keep layout but expand height if needed */
+    z-index: 10;
+    transform: scale(1.02);
+    /* Pop out slightly */
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+}
+
+.card-content {
+    padding: 1.5rem;
+    position: relative;
+    z-index: 2;
+    background: white;
+    /* Ensure text is readable */
+}
+
+.news-marquee-container {
+    height: 80px;
+    /* Initial small height */
+    overflow: hidden;
+    background: #f0f0f0;
+    /* Smooth background */
+    position: relative;
+    transition: height 0.5s ease;
+    border-top: 1px solid #eee;
+}
+
+.news-card-interactive.expanded .news-marquee-container {
+    height: 180px;
+    /* Expanded height */
+}
+
+.news-marquee {
+    display: flex;
+    gap: 15px;
+    padding: 10px;
+    width: max-content;
+    /* Allow content to stretch */
+    animation: scrollMarquee 20s linear infinite;
+    align-items: center;
+}
+
+.news-marquee.reverse-scroll {
+    animation: scrollMarqueeReverse 25s linear infinite;
+}
+
+.news-marquee img {
+    height: 60px;
+    /* Initial small image */
+    width: auto;
+    border-radius: 6px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    cursor: zoom-in;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+/* Center Highlight Simulation: 
+   Real CSS-only center checking is hard without scroll-snap. 
+   We will rely on the expanded state to scale images up globally. */
+.news-card-interactive.expanded .news-marquee img {
+    height: 140px;
+    /* Larger images when card is expanded */
+}
+
+.news-marquee img:hover {
+    transform: scale(1.1);
+    /* Zoom on hover */
+    z-index: 5;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes scrollMarquee {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-50%);
+    }
+
+    /* Assumes content is duplicated */
+}
+
+@keyframes scrollMarqueeReverse {
+    0% {
+        transform: translateX(-50%);
+    }
+
+    100% {
+        transform: translateX(0);
+    }
+}
+
+/* Dynamic News Styles */
+.news-image-container {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    position: relative;
+    border-bottom: 1px solid #eee;
+}
+
+.news-image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.card:hover .news-image-container img {
+    transform: scale(1.05);
+}
+
+.read-more-btn {
+    display: inline-block;
+    margin-top: 1rem;
+    color: var(--primary-color);
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 0.9rem;
+    text-decoration: underline;
+}
+
+.read-more-btn:hover {
+    color: var(--dark-green);
+}
+
+/* Image Modal Gallery */
+.image-modal {
+    display: none;
+    position: fixed;
+    z-index: 30001;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.95);
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(8px);
+    flex-direction: column;
+}
+
+.image-modal img {
+    max-width: 90%;
+    max-height: 85vh;
+    border-radius: 4px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+    animation: zoomIn 0.3s ease;
+    object-fit: contain;
+    /* Ensure full image is visible */
+}
+
+.modal-nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: none;
+    font-size: 2rem;
+    padding: 1rem;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: all 0.3s;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-nav-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.prev-btn {
+    left: 20px;
+}
+
+.next-btn {
+    right: 20px;
+}
+
+.modal-close-btn {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    color: white;
+    font-size: 3rem;
+    cursor: pointer;
+    background: none;
+    border: none;
+    opacity: 0.7;
+    transition: opacity 0.3s;
+}
+
+.modal-close-btn:hover {
+    opacity: 1;
+}
+
+@keyframes zoomIn {
+    from {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Stats Section (Home Preview) */
+.stats-preview {
+    background-color: var(--white);
+    text-align: center;
+    padding: 4rem 5%;
+}
+
+/* Footer Advanced */
+footer {
+    background: linear-gradient(to bottom, #1a4d2e, #002b00);
+    color: var(--white);
+    padding: 1rem 5%;
+    /* Significantly reduced padding */
+    margin-top: auto;
+    /* Push to bottom */
+    position: relative;
+    overflow: hidden;
+}
+
+.footer-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    /* Better vertical alignment */
+    gap: 1rem;
+    /* Reduced gap */
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-brand h2 {
+    font-size: 1.5rem;
+    /* Smaller font */
+    margin-bottom: 0.2rem;
+    color: var(--accent-color);
+    text-transform: uppercase;
+}
+
+.footer-brand p {
+    font-size: 0.8rem;
+    opacity: 0.8;
+}
+
+.footer-social {
+    flex: 2;
+    /* Allocate more space to center properly */
+    display: flex;
+    justify-content: center;
+    min-width: 280px;
+}
+
+.social-media {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    /* Tighter gap */
+    justify-content: center;
+    width: 100%;
+    max-width: 320px;
+}
+
+.social-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.15);
+    padding: 0.5rem 1rem;
+    /* Smaller padding */
+    border-radius: 8px;
+    transition: transform 0.3s, background 0.3s;
+    text-decoration: none;
+    color: white;
+    font-weight: 500;
+    font-size: 0.85rem;
+}
+
+.social-item:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+.social-item i {
+    font-size: 1.2rem;
+    width: 20px;
+    text-align: center;
+}
+
+.qr-section {
+    text-align: center;
+    background: white;
+    padding: 0.5rem;
+    /* Smaller padding */
+    border-radius: 8px;
+    color: #333;
+    max-width: 120px;
+}
+
+.qr-section img {
+    width: 100px;
+    height: 100px;
+}
+
+.qr-label {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    display: block;
+    font-size: 0.8rem;
+    color: var(--white);
+    text-align: center;
+}
+
+.footer-qr {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.copyright {
+    text-align: center;
+    margin-top: 1rem;
+    /* Reduced margin */
+    padding-top: 0.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 0.75rem;
+    opacity: 0.7;
+    width: 100%;
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 30000;
+    /* Highest priority */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background-color: var(--white);
+    padding: 2rem;
+    border-radius: 10px;
+    text-align: center;
+    width: 90%;
+    max-width: 400px;
+    position: relative;
+    box-shadow: var(--shadow-lg);
+    animation: fadeIn 0.3s;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #aaa;
+}
+
+.close-btn:hover {
+    color: #333;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 5px;
+    background-color: #eee;
+    margin-top: 1rem;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.progress {
+    height: 100%;
+    background-color: var(--primary-color);
+    width: 100%;
+    transition: width linear;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .branding-bar {
+        text-align: center;
+    }
+
+    .school-identity {
+        flex-direction: row;
+        flex-wrap: nowrap;
+        /* Strict single line */
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .school-name h1 {
+        font-size: 0.75rem;
+        /* Sufficiently small for single line */
+        white-space: nowrap;
+        overflow: visible;
+        /* Show all text */
+        margin: 0;
+        text-align: left;
+    }
+
+    .school-logo {
+        width: 40px !important;
+        /* Ensure logo fits */
+        height: 40px !important;
+        flex-shrink: 0;
+    }
+
+    .ministry-links {
+        gap: 1rem;
+        font-size: 0.7rem;
+    }
+
+    .ministry-item img {
+        height: 25px;
+    }
+
+    /* Mobile Nav */
+    .nav-container {
+        justify-content: space-between;
+        /* Space out logo area (if any) and toggle */
+    }
+
+    /* We need to force the toggle to appear on the right */
+    .menu-toggle {
+        display: block;
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 20002;
+    }
+
+    .nav-links {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: var(--dark-green);
+        padding: 1rem;
+        text-align: center;
+        gap: 15px;
+        z-index: 20001;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    .footer-qr {
+        display: none !important;
+    }
+
+    .nav-links.active {
+        display: flex;
+    }
+
+    /* Adjust Footer for Mobile Grid */
+    .footer-content {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .footer-social {
+        width: 100%;
+    }
+
+    .social-media {
+        max-width: 100%;
+        /* Use full width */
+    }
+}

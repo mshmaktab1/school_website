@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistika - 1-Maktab</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            text-align: center;
+        }
+
+        .stat-box {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: var(--shadow-md);
+            border-bottom: 5px solid var(--secondary-color);
+        }
+
+        .stat-icon {
+            font-size: 3rem;
+            color: var(--dark-green);
+            margin-bottom: 1rem;
+        }
+
+        .stat-num {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 1.2rem;
+            color: #555;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header>
+        <!-- Ticker -->
+        <div class="ticker-wrap">
+            <div class="ticker">
+                DIQQAT! Sayt hozirda test rejimida ishlamoqda.
+            </div>
+        </div>
+
+        <!-- Branding Section -->
+        <div class="branding-bar">
+            <!-- 1. Ministry Links (TOP) -->
+            <div class="ministry-links">
+                <div class="ministry-item">
+                    <img src="logo_min.png" alt="Gerb">
+                    <span>O‘zbekiston Respublikasi maktabgacha va maktab ta'limi vazirligi</span>
+                </div>
+            </div>
+
+            <!-- 2. School Identity (BOTTOM) -->
+            <div class="school-identity">
+                <!-- Force Inline Logo Size -->
+                <img src="logo.png" alt="Maktab Logosi" class="school-logo"
+                    style="width: 50px !important; height: 50px !important;">
+                <div class="school-name">
+                    <h1>Marg'ilon shahar 1-umumiy o'rta ta'lim maktabi</h1>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <nav>
+            <div class="nav-container">
+                <div class="menu-toggle" id="mobile-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="index.html">Bosh Sahifa</a></li>
+                    <li><a href="about.html">Maktab haqida</a></li>
+                    <li><a href="statistics.html" class="active"> Statistika</a></li>
+                    <li><a href="achievements.html">Yutuqlar</a></li>
+                    <li><a href="contact.html">Aloqa</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <section>
+        <h2 class="section-title">Maktab Statistikasi</h2>
+        <p style="text-align: center; margin-bottom: 3rem;">Bizning maktab raqamlarda</p>
+
+        <div class="stats-container">
+            <div class="stat-box">
+                <i class="fas fa-user-graduate stat-icon"></i>
+                <span class="stat-num">1,250</span>
+                <span class="stat-label">Jami O'quvchilar</span>
+            </div>
+            <div class="stat-box">
+                <i class="fas fa-chalkboard-teacher stat-icon"></i>
+                <span class="stat-num">85</span>
+                <span class="stat-label">Malakali O'qituvchilar</span>
+            </div>
+            <div class="stat-box">
+                <i class="fas fa-door-open stat-icon"></i>
+                <span class="stat-num">42</span>
+                <span class="stat-label">Sinflar Soni</span>
+            </div>
+            <div class="stat-box">
+                <i class="fas fa-award stat-icon"></i>
+                <span class="stat-num">120+</span>
+                <span class="stat-label">Yillik Yutuqlar</span>
+            </div>
+            <div class="stat-box">
+                <i class="fas fa-book-reader stat-icon"></i>
+                <span class="stat-num">98%</span>
+                <span class="stat-label">Oliy O'quv Yurti</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <!-- Branding (Left) -->
+            <div class="footer-brand">
+                <h2>1-MAKTAB</h2>
+                <p>Marg'ilon shahar 1-umumiy<br>o'rta ta'lim maktabi</p>
+            </div>
+
+            <!-- Social Media (Center) -->
+            <div class="footer-social">
+                <div class="social-media">
+                    <!-- Row 1 -->
+                    <a href="https://t.me/mshmaktab1" target="_blank" class="social-item">
+                        <i class="fab fa-telegram"></i> <span>Telegram</span>
+                    </a>
+                    <a href="https://www.youtube.com/@mshmaktab1" target="_blank" class="social-item">
+                        <i class="fab fa-youtube"></i> <span>YouTube</span>
+                    </a>
+                    <!-- Row 2 -->
+                    <a href="https://www.facebook.com/profile.php?id=61582267918442" target="_blank"
+                        class="social-item">
+                        <i class="fab fa-facebook"></i> <span>Facebook</span>
+                    </a>
+                    <a href="https://www.instagram.com/mshmaktab1/" target="_blank" class="social-item">
+                        <i class="fab fa-instagram"></i> <span>Instagram</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- QR Code (Right) -->
+            <div class="footer-qr">
+                <span class="qr-label">Sahifani telefonda ko'rish</span>
+                <div class="qr-section">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://mshmaktab1.netlify.app"
+                        alt="QR Code">
+                </div>
+            </div>
+
+            <div class="copyright">
+                <p>&copy; 2025 Marg'ilon shahar 1-umumiy o'rta ta'lim maktabi. Barcha huquqlar himoyalangan.</p>
+
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
