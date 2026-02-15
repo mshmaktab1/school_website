@@ -202,25 +202,8 @@ function openNewsModal(newsId) {
     const news = window.globalNewsData.find(n => n.id === newsId);
     if (!news) return;
 
-    // Check if modal exists
-    let modal = document.getElementById('news-detail-modal');
-    if (!modal) {
-        modal = document.createElement('div');
-        modal.id = 'news-detail-modal';
-        modal.className = 'modal news-detail-modal';
-        modal.style.display = 'none';
-        modal.innerHTML = `
-            <div class="modal-content news-modal-content">
-                <span class="close-btn" onclick="closeNewsModal()">&times;</span>
-                <div id="news-modal-body"></div>
-            </div>
-        `;
-        document.body.appendChild(modal);
-
-        modal.onclick = (e) => {
-            if (e.target === modal) closeNewsModal();
-        }
-    }
+    const modalElement = document.getElementById('news-detail-modal');
+    if (!modalElement) return;
 
     const modalBody = document.getElementById('news-modal-body');
     const dateStr = formatUzbekDate(new Date(news.date));
@@ -230,57 +213,48 @@ function openNewsModal(newsId) {
 
     let imageHtml = '';
     if (news.image) {
-        imageHtml = `<img src="${news.image}" class="news-modal-img" alt="Yangilik rasmi">`;
+        imageHtml = `<img src="${news.image}" class="news-modal-img w-100 rounded mb-3" alt="Yangilik rasmi" style="max-height: 400px; object-fit: cover;">`;
     }
 
     modalBody.innerHTML = `
         ${imageHtml}
-        <div class="news-modal-meta">
-            <span class="news-modal-date"><i class="far fa-calendar-alt"></i> ${dateStr}</span>
+        <div class="news-modal-meta mb-3">
+            <span class="text-muted"><i class="far fa-calendar-alt"></i> ${dateStr}</span>
         </div>
         <div class="news-modal-text">
             ${content}
         </div>
-        <div class="news-modal-footer">
-            <a href="https://t.me/${news.id.split('/')[0] || 'channel'}/${news.id.split('/')[1] || ''}" target="_blank" class="telegram-link-btn">
+        <div class="news-modal-footer mt-4 border-top pt-3">
+            <a href="https://t.me/${news.id.split('/')[0] || 'channel'}/${news.id.split('/')[1] || ''}" target="_blank" class="btn btn-primary w-100">
                 <i class="fab fa-telegram"></i> Telegramda ko'rish
             </a>
         </div>
     `;
 
-    modal.style.display = 'flex';
+    const bsModal = new bootstrap.Modal(modalElement);
+    bsModal.show();
     console.log('Modal opened for:', newsId);
 }
 
-function closeNewsModal() {
-    const modal = document.getElementById('news-detail-modal');
-    if (modal) modal.style.display = 'none';
-}
-
-// Global functions for News Interaction (outside DOMContentLoaded to be accessible by inline onclick)
+// Global functions for News Interaction
 function toggleNewsExpand(card) {
-    // Collapse others
     document.querySelectorAll('.news-card-interactive').forEach(c => {
         if (c !== card) c.classList.remove('expanded');
     });
-    // Toggle current
     card.classList.toggle('expanded');
 }
 
 function openImageModal(imgSrc) {
-    // Check if modal exists
     let modal = document.getElementById('global-image-modal');
     if (!modal) {
-        // Create modal dynamically if not exists
         modal = document.createElement('div');
         modal.id = 'global-image-modal';
         modal.className = 'image-modal';
         modal.innerHTML = `
             <span class="close-btn" style="position:absolute; top:20px; right:30px; color:white; font-size:40px; cursor:pointer;" onclick="closeImageModal()">&times;</span>
-            <img id="modal-image-content" src="">
+            <img id="modal-image-content" src="" style="max-width:90%; max-height:90%;">
         `;
         document.body.appendChild(modal);
-        // Close on background click
         modal.onclick = (e) => {
             if (e.target === modal) closeImageModal();
         }
@@ -294,107 +268,4 @@ function closeImageModal() {
     const modal = document.getElementById('global-image-modal');
     if (modal) modal.style.display = 'none';
 }
-
-// Theme Manager Logic
-const ThemeManager = {
-    // CDN Map for Themes
-    themes: {
-        'default': 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css',
-        'cerulean': 'https://cdn.jsdelivr.net/npm/bootswatch@5.3.2/dist/cerulean/bootstrap.min.css',
-        'cosmo': 'https://cdn.jsdelivr.net/npm/bootswatch@5.3.2/dist/cosmo/bootstrap.min.css',
-        'darkly': 'https://cdn.jsdelivr.net/npm/bootswatch@5.3.2/dist/darkly/bootstrap.min.css',
-        'united': 'https://cdn.jsdelivr.net/npm/bootswatch@5.3.2/dist/united/bootstrap.min.css',
-        'spring': 'https://cdn.jsdelivr.net/npm/bootswatch@5.3.2/dist/minty/bootstrap.min.css' // Minty is a good base for Spring
-    },
-
-    animationInterval: null,
-
-    init() {
-        const savedTheme = localStorage.getItem('selectedTheme') || 'default';
-        this.setTheme(savedTheme, false); // false = don't save again on init
-        this.setupSpringInteractions();
-    },
-
-    setTheme(themeName, save = true) {
-        const themeUrl = this.themes[themeName];
-        if (!themeUrl) return;
-
-        // Swap CSS
-        const themeLink = document.getElementById('theme-css');
-        if (themeLink) {
-            themeLink.href = themeUrl;
-        }
-
-        // Set Data Attribute for Custom Styles (like Spring)
-        document.documentElement.setAttribute('data-theme', themeName);
-
-        // Handle Animations
-        if (themeName === 'spring') {
-            this.startSpringAnimations();
-        } else {
-            this.stopSpringAnimations();
-        }
-
-        if (save) {
-            localStorage.setItem('selectedTheme', themeName);
-        }
-    },
-
-    startSpringAnimations() {
-        if (this.animationInterval) return;
-
-        // Natural White Blossoms and Vibrant Green Leaves (from Image)
-        const plantElements = [
-            // White Blossom with Yellow Center
-            '<svg viewBox="0 0 24 24" width="22" height="22"><circle cx="12" cy="12" r="10" fill="white" opacity="0.9"/><circle cx="12" cy="12" r="3" fill="#ffd700"/><path d="M12,2 Q15,5 12,8 Q9,5 12,2" fill="white" opacity="0.5" transform="rotate(0 12 12)"/><path d="M12,2 Q15,5 12,8 Q9,5 12,2" fill="white" opacity="0.5" transform="rotate(72 12 12)"/><path d="M12,2 Q15,5 12,8 Q9,5 12,2" fill="white" opacity="0.5" transform="rotate(144 12 12)"/><path d="M12,2 Q15,5 12,8 Q9,5 12,2" fill="white" opacity="0.5" transform="rotate(216 12 12)"/><path d="M12,2 Q15,5 12,8 Q9,5 12,2" fill="white" opacity="0.5" transform="rotate(288 12 12)"/></svg>',
-            // Vibrant Spring Leaf
-            '<svg viewBox="0 0 24 24" width="20" height="20"><path d="M17,8C8,10 5.9,16.17 3.82,21.34L5.71,22L6.66,19.7C7.14,19.87 7.64,20 8.17,20C12.14,20 17,14.9 17,8V8M16,2C16,2 14,2.1 12,3C12,3 9,4 9,8C9,8 9.1,9.7 10,11C10,11 12,14 16,14C16,14 20,14 22,10C22,10 22,2 16,2Z" fill="#a6ce39"/></svg>',
-            // Soft Light Blossom
-            '<svg viewBox="0 0 24 24" width="18" height="18"><circle cx="12" cy="12" r="8" fill="white" opacity="0.8"/><circle cx="12" cy="12" r="2" fill="#ffd700"/></svg>'
-        ];
-
-        this.animationInterval = setInterval(() => {
-            if (document.documentElement.getAttribute('data-theme') !== 'spring') return;
-
-            const el = document.createElement('div');
-            el.className = 'spring-flower';
-            el.innerHTML = plantElements[Math.floor(Math.random() * plantElements.length)];
-            el.style.left = Math.random() * 100 + 'vw';
-            el.style.animationDuration = Math.random() * 4 + 6 + 's'; // 6-10s fall (slower, more graceful)
-            document.body.appendChild(el);
-
-            setTimeout(() => el.remove(), 10000);
-        }, 1200); // Slower spawn rate
-    },
-
-    stopSpringAnimations() {
-        if (this.animationInterval) {
-            clearInterval(this.animationInterval);
-            this.animationInterval = null;
-        }
-        document.querySelectorAll('.spring-flower').forEach(el => el.remove());
-    },
-
-    setupSpringInteractions() {
-        document.addEventListener('mousemove', (e) => {
-            if (document.documentElement.getAttribute('data-theme') !== 'spring') return;
-
-            // Significantly reduced frequency (3% chance per move)
-            if (Math.random() > 0.03) return;
-
-            const trail = document.createElement('div');
-            trail.className = 'mouse-trail';
-            // White Blossom SVG for mouse trail
-            trail.innerHTML = '<svg viewBox="0 0 24 24" width="12" height="12"><circle cx="12" cy="12" r="10" fill="white" opacity="0.7"/><circle cx="12" cy="12" r="3" fill="#ffd700" opacity="0.8"/></svg>';
-            trail.style.left = (e.clientX - 7) + 'px';
-            trail.style.top = (e.clientY - 7) + 'px';
-            document.body.appendChild(trail);
-
-            setTimeout(() => trail.remove(), 1500);
-        });
-    }
-};
-
-// Start ThemeManager
-ThemeManager.init();
 
