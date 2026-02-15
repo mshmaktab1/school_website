@@ -152,6 +152,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const news = await response.json();
 
+            // Store globally for modal access
+            window.globalNewsData = news;
+
             if (news.length === 0) {
                 container.innerHTML = '<p class="no-news" style="text-align: center; grid-column: 1/-1;">Hozircha yangiliklar yo\'q.</p>';
                 return;
@@ -159,17 +162,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
             container.innerHTML = ''; // Clear loading spinner
 
+            let lastGroup = '';
+
             news.forEach(item => {
+                const dateObj = new Date(item.date);
+
+                // 1. Grouping by Month Year (e.g., "2026-yil Fevral")
+                const groupKey = formatMonthYear(dateObj);
+                if (groupKey !== lastGroup) {
+                    const groupHeader = document.createElement('div');
+                    groupHeader.className = 'news-group-header';
+                    groupHeader.innerHTML = `<h3><i class="far fa-calendar-check"></i> ${groupKey}</h3>`;
+                    container.appendChild(groupHeader);
+                    lastGroup = groupKey;
+                }
+
                 const card = document.createElement('div');
                 card.className = 'card news-card-interactive';
-                card.onclick = () => toggleNewsExpand(card);
+                // Remove toggleNewsExpand to use Modal instead, or keep it but clicking read-more opens modal
+                // card.onclick = () => toggleNewsExpand(card); 
 
-                // Format Date
-                const dateObj = new Date(item.date);
-                const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
-                const dateStr = dateObj.toLocaleDateString('uz-UZ', options);
+                // 2. Format Date (e.g., "15-fevral, 2026")
+                const dateStr = formatUzbekDate(dateObj);
 
-                // Image HTML
                 let imageHtml = '';
                 if (item.image) {
                     imageHtml = `
@@ -179,22 +194,17 @@ document.addEventListener('DOMContentLoaded', () => {
                     `;
                 }
 
-                // Text Content
-                // Use default text if HTML not available, but prefer HTML if we trust it (Bot/Scraper content)
-                // Here we use item.text for safety and simplicity, or item.html if you want formatting.
-                // Truncate logic
                 const fullText = item.text || '';
-                const shortText = fullText.length > 150 ? fullText.substring(0, 150) + '...' : fullText;
-
-                // We'll store full text in a data attribute or hidden div if we want to expand it
-                // For now, let's just show text.
+                const shortText = fullText.length > 120 ? fullText.substring(0, 120) + '...' : fullText;
 
                 card.innerHTML = `
                     ${imageHtml}
                     <div class="card-content">
-                        <span class="card-date"><i class="far fa-calendar-alt"></i> ${dateStr}</span>
+                        <span class="card-date"><i class="far fa-clock"></i> ${dateStr}</span>
                         <p class="news-text">${shortText}</p>
-                        ${fullText.length > 150 ? '<span class="read-more-btn">Batafsil o\'qish</span>' : ''}
+                        <button class="read-more-btn" onclick="openNewsModal('${item.id.replace(/'/g, "\\'")}')">
+                            Batafsil o'qish <i class="fas fa-arrow-right"></i>
+                        </button>
                     </div>
                 `;
 
@@ -206,6 +216,87 @@ document.addEventListener('DOMContentLoaded', () => {
             container.innerHTML = '<p class="error-msg" style="text-align: center; grid-column: 1/-1;">Yangiliklarni yuklashda xatolik yuz berdi.</p>';
         }
     }
+});
+
+// Helper: Custom Uzbek Date Formatter
+function formatUzbekDate(date) {
+    const months = [
+        "Yanvar", "Fevral", "Mart", "Aprel", "May", "Iyun",
+        "Iyul", "Avgust", "Sentyabr", "Oktyabr", "Noyabr", "Dekabr"
+    ];
+    const day = date.getDate();
+    const month = months[date.getMonth()];
+    const year = date.getFullYear();
+
+    return `${day}-${month.toLowerCase()}, ${year}`;
+}
+
+function formatMonthYear(date) {
+    const months = [
+        "Yanvar", "Fevral", "Mart", "Aprel", "May", "Iyun",
+        "Iyul", "Avgust", "Sentyabr", "Oktyabr", "Noyabr", "Dekabr"
+    ];
+    return `${date.getFullYear()}-yil ${months[date.getMonth()]}`;
+}
+
+// News Modal Logic
+function openNewsModal(newsId) {
+    const news = window.globalNewsData.find(n => n.id === newsId);
+    if (!news) return;
+
+    // Check if modal exists
+    let modal = document.getElementById('news-detail-modal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'news-detail-modal';
+        modal.className = 'modal news-detail-modal';
+        modal.style.display = 'none';
+        modal.innerHTML = `
+            <div class="modal-content news-modal-content">
+                <span class="close-btn" onclick="closeNewsModal()">&times;</span>
+                <div id="news-modal-body"></div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+
+        modal.onclick = (e) => {
+            if (e.target === modal) closeNewsModal();
+        }
+    }
+
+    const modalBody = document.getElementById('news-modal-body');
+    const dateStr = formatUzbekDate(new Date(news.date));
+
+    // Prefer HTML content if available (from scraper), else plain text
+    let content = news.html || news.text.replace(/\n/g, '<br>');
+
+    let imageHtml = '';
+    if (news.image) {
+        imageHtml = `<img src="${news.image}" class="news-modal-img" alt="Yangilik rasmi">`;
+    }
+
+    modalBody.innerHTML = `
+        ${imageHtml}
+        <div class="news-modal-meta">
+            <span class="news-modal-date"><i class="far fa-calendar-alt"></i> ${dateStr}</span>
+        </div>
+        <div class="news-modal-text">
+            ${content}
+        </div>
+        <div class="news-modal-footer">
+            <a href="https://t.me/${news.id.split('/')[0]}/${news.id.split('/')[1]}" target="_blank" class="telegram-link-btn">
+                <i class="fab fa-telegram"></i> Telegramda ko'rish
+            </a>
+        </div>
+    `;
+
+    modal.style.display = 'flex';
+}
+
+function closeNewsModal() {
+    const modal = document.getElementById('news-detail-modal');
+    if (modal) modal.style.display = 'none';
+}
 });
 
 // Global functions for News Interaction (outside DOMContentLoaded to be accessible by inline onclick)
