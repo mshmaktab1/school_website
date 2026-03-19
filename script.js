@@ -1,8 +1,7 @@
 // ==================== ADMIN CONFIG ====================
 // Sayt ko'chirilganda faqat shu yerdagi nomni o'zgartiring:
 const MANAGEMENT_CONFIG = {
-    googleAccount: "[mshmaktab1]";
-    admin_telegram: "[@komiljon_99]"
+    googleAccount: "[mshmaktab1]"
 };
 
 async function loadFooter() {
