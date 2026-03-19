@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="no-referrer">
+    <title>Statistika - 1-Maktab</title>
+    <link id="theme-css" rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .stats-hero {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            padding: 100px 0;
+            text-align: center;
+            color: white;
+            margin-bottom: 60px;
+        }
+
+        .stats-hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+        }
+
+        .stats-main-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-bottom: 100px;
+        }
+
+        .stat-premium-card {
+            background: white;
+            border-radius: 24px;
+            padding: 45px 30px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid rgba(0, 0, 0, 0.03);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-premium-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 20px 50px rgba(67, 56, 202, 0.1);
+        }
+
+        .stat-premium-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--primary-gradient);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 20px rgba(67, 56, 202, 0.2);
+        }
+
+        .stat-premium-number {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 10px;
+            line-height: 1;
+        }
+
+        .stat-premium-label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .loading-stats {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 100px;
+        }
+    </style>
+</head>
+
+<body>
+    <script>
+        const savedTheme = localStorage.getItem('theme') || 'modern';
+        document.body.classList.add('theme-' + savedTheme);
+    </script>
+
+    <!-- Header -->
+    <header>
+        <div class="ticker-wrap">
+            <div class="ticker">DIQQAT! Sayt hozirda test rejimida ishlamoqda.</div>
+        </div>
+        <div class="branding-bar">
+            <div class="ministry-links">
+                <div class="ministry-item"><img src="logo_min.png" alt="Gerb"><span>O‘zbekiston Respublikasi maktabgacha
+                        va maktab ta'limi vazirligi</span></div>
+            </div>
+            <div class="school-identity">
+                <img src="logo.png" alt="Maktab Logosi" class="school-logo"
+                    style="width: 50px !important; height: 50px !important;">
+                <div class="school-name">
+                    <h1>Marg'ilon shahar 1-umumiy o'rta ta'lim maktabi</h1>
+                </div>
+            </div>
+        </div>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-transparent">
+            <div class="container">
+                <button class="navbar-toggler mx-auto" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarNav"><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav mx-auto align-items-center">
+                        <li class="nav-item"><a class="nav-link" href="index.html">Bosh sahifa</a></li>
+                        <li class="nav-item"><a class="nav-link" href="about.html">Maktab haqida</a></li>
+                        <li class="nav-item"><a class="nav-link" href="achievements.html">Yutuqlar</a></li>
+                        <li class="nav-item"><a class="nav-link active" href="statistics.html">Statistika</a></li>
+                        <li class="nav-item"><a class="nav-link" href="contact.html">Aloqa</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <section class="stats-hero">
+        <div class="container animate-up">
+            <div class="section-badge mb-3" style="background: rgba(255,255,255,0.1); color: white;"><i
+                    class="fas fa-chart-bar me-2"></i>Raqamlar</div>
+            <h1>Maktab Statistikasi</h1>
+            <p class="lead opacity-75">Bizning faoliyatimiz va natijalarimiz raqamlarda</p>
+        </div>
+    </section>
+
+    <div class="container">
+        <div id="statsContainer" class="stats-main-grid">
+            <div class="loading-stats">
+                <div class="spinner-border text-primary" role="status"></div>
+                <p class="mt-3 text-muted">Statistika yuklanmoqda...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer></footer>
+
+    <button id="backToTop" class="btn-3d-up"><i class="fas fa-chevron-up"></i></button>
+    <button id="jumpToFooter" class="btn-3d-down"><i class="fas fa-chevron-down"></i></button>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            loadStats();
+        });
+
+        async function loadStats() {
+            const container = document.getElementById('statsContainer');
+            try {
+                const response = await fetch('data/statistics.txt');
+                if (!response.ok) throw new Error('Fayl topilmadi');
+                const text = await response.text();
+
+                const lines = text.split('\n').filter(l => l.trim().length > 0 && l.includes(':'));
+                container.innerHTML = '';
+
+                const iconMap = {
+                    'o\'quvchilar': 'fas fa-user-graduate',
+                    'o\'qituvchilar': 'fas fa-chalkboard-teacher',
+                    'sinflar': 'fas fa-door-open',
+                    'yutuqlar': 'fas fa-award',
+                    'oliy o\'quv yurti': 'fas fa-book-reader',
+                    'binolar': 'fas fa-building',
+                    'tajriba': 'fas fa-calendar-alt'
+                };
+
+                lines.forEach(line => {
+                    const [label, value] = line.split(':');
+                    const cleanLabel = label.trim();
+                    const icon = iconMap[cleanLabel.toLowerCase()] || 'fas fa-chart-line';
+
+                    const card = document.createElement('div');
+                    card.className = 'stat-premium-card animate-up';
+                    card.innerHTML = `
+                        <div class="stat-premium-icon"><i class="${icon}"></i></div>
+                        <div class="stat-premium-number counter" data-target="${value.trim().replace(/[^0-9]/g, '')}">${value.trim()}</div>
+                        <div class="stat-premium-label">${cleanLabel}</div>
+                    `;
+                    container.appendChild(card);
+                });
+            } catch (error) {
+                container.innerHTML = `<div class="col-12 text-center py-5 text-muted"><p>Hozircha statistika ma'lumotlari kiritilmagan.</p></div>`;
+            }
+        }
+    </script>
+</body>
+
+</html>

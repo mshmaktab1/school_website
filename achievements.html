@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="no-referrer">
+    <title>Yutuqlarimiz - 1-maktab</title>
+    <link id="theme-css" rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .achievements-hero {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            padding: 80px 0;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 50px;
+        }
+
+        .achievements-hero h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 15px;
+            background: linear-gradient(to right, #fff, #cbd5e1);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            padding-bottom: 80px;
+        }
+
+        .achievement-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            padding: 30px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        .achievement-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            background: white;
+        }
+
+        .achievement-icon {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+        }
+
+        .achievement-date {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .achievement-card h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 15px;
+        }
+
+        .achievement-card p {
+            color: #64748b;
+            line-height: 1.6;
+            margin-bottom: 0;
+        }
+
+        .achievement-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 4px;
+            background: var(--primary-gradient);
+            transition: width 0.3s ease;
+        }
+
+        .achievement-card:hover::after {
+            width: 100%;
+        }
+
+        .loading-achievements {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 50px;
+        }
+    </style>
+</head>
+
+<body>
+    <script>
+        const savedTheme = localStorage.getItem('theme') || 'modern';
+        document.body.classList.add('theme-' + savedTheme);
+    </script>
+
+    <!-- Header -->
+    <header>
+        <div class="ticker-wrap">
+            <div class="ticker">DIQQAT! Sayt hozirda test rejimida ishlamoqda.</div>
+        </div>
+        <div class="branding-bar">
+            <div class="ministry-links">
+                <div class="ministry-item"><img src="logo_min.png" alt="Gerb"><span>O‘zbekiston Respublikasi maktabgacha
+                        va maktab ta'limi vazirligi</span></div>
+            </div>
+            <div class="school-identity">
+                <img src="logo.png" alt="Maktab Logosi" class="school-logo"
+                    style="width: 50px !important; height: 50px !important;">
+                <div class="school-name">
+                    <h1>Marg'ilon shahar 1-umumiy o'rta ta'lim maktabi</h1>
+                </div>
+            </div>
+        </div>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-transparent">
+            <div class="container">
+                <button class="navbar-toggler mx-auto" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarNav"><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav mx-auto align-items-center">
+                        <li class="nav-item"><a class="nav-link" href="index.html">Bosh sahifa</a></li>
+                        <li class="nav-item"><a class="nav-link" href="about.html">Maktab haqida</a></li>
+                        <li class="nav-item"><a class="nav-link active" href="achievements.html">Yutuqlar</a></li>
+                        <li class="nav-item"><a class="nav-link" href="statistics.html">Statistika</a></li>
+                        <li class="nav-item"><a class="nav-link" href="contact.html">Aloqa</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <section class="achievements-hero">
+        <div class="container animate-up">
+            <div class="section-badge mb-3" style="background: rgba(255,255,255,0.1); color: white;"><i
+                    class="fas fa-trophy me-2"></i>Muvaffaqiyatlar</div>
+            <h1>Bizning Yutuqlarimiz</h1>
+            <p class="lead opacity-75">Maktabimiz o'quvchi va o'qituvchilarining erishgan natijalari</p>
+        </div>
+    </section>
+
+    <div class="container">
+        <div id="achievementsContainer" class="achievements-grid">
+            <div class="loading-achievements">
+                <div class="spinner-border text-primary" role="status"></div>
+                <p class="mt-3 text-muted">Muvaffaqiyatlar yuklanmoqda...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer></footer>
+
+    <button id="backToTop" class="btn-3d-up"><i class="fas fa-chevron-up"></i></button>
+    <button id="jumpToFooter" class="btn-3d-down"><i class="fas fa-chevron-down"></i></button>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            loadAchievements();
+        });
+
+        async function loadAchievements() {
+            const container = document.getElementById('achievementsContainer');
+            try {
+                const response = await fetch('data/achievements.txt');
+                if (!response.ok) throw new Error('Fayl topilmadi');
+                const text = await response.text();
+
+                const sections = text.split('===').filter(s => s.trim().length > 0);
+                container.innerHTML = '';
+
+                sections.forEach(section => {
+                    const lines = section.trim().split('\n');
+                    const data = {};
+                    lines.forEach(line => {
+                        const [key, ...val] = line.split(':');
+                        if (key && val) data[key.trim().toLowerCase()] = val.join(':').trim();
+                    });
+
+                    const card = document.createElement('div');
+                    card.className = 'achievement-card animate-up';
+                    card.innerHTML = `
+                        <div class="achievement-icon"><i class="${data.ikonka || 'fas fa-award'}"></i></div>
+                        <span class="achievement-date">${data.sana || ''}</span>
+                        <h3>${data.sarlavha || 'Yutuq'}</h3>
+                        <p>${data.tavsif || ''}</p>
+                    `;
+                    container.appendChild(card);
+                });
+            } catch (error) {
+                container.innerHTML = `<div class="col-12 text-center py-5 text-muted"><p>Hozircha yutuqlar ma'lumotlari kiritilmagan.</p></div>`;
+            }
+        }
+    </script>
+</body>
+
+</html>

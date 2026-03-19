@@ -1,0 +1,18 @@
+Sana: Noyabr, 2025
+Sarlavha: Viloyat "Eng yaxshi maktab" tanlovi
+Tavsif: Maktabimiz viloyat miqyosida o'tkazilgan "Eng yaxshi innovatsion maktab" tanlovida 2-o'rinni egalladi.
+Ikonka: fas fa-trophy
+
+===
+
+Sana: Oktyabr, 2025
+Sarlavha: Sport musobaqalari
+Tavsif: Futbol jamoamiz shahar kubogida kumush medal sohibi bo'ldi va viloyat bosqichiga yo'llanma oldi.
+Ikonka: fas fa-medal
+
+===
+
+Sana: Sentyabr, 2025
+Sarlavha: Xalqaro sertifikatlar
+Tavsif: 20 nafar o'quvchimiz B2 va C1 darajadagi ingliz tili sertifikatlarini qo'lga kiritib, imtiyozli o'qish imkoniga ega bo'ldi.
+Ikonka: fas fa-certificate

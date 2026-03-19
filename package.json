@@ -1,0 +1,22 @@
+{
+    "name": "school-website-news-fetcher",
+    "version": "1.0.0",
+    "description": "Script to fetch news from Telegram channel for the school website.",
+    "main": "scripts/fetch_news.js",
+    "scripts": {
+        "news": "node scripts/fetch_news.js"
+    },
+    "keywords": [
+        "telegram",
+        "news",
+        "fetcher"
+    ],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "axios": "^1.13.5",
+        "cheerio": "^1.2.0",
+        "dotenv": "^16.3.1",
+        "node-fetch": "^3.3.2"
+    }
+}
