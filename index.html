@@ -46,17 +46,23 @@
                 <div class="col-12 mb-2">
                     <div
                         class="d-flex align-items-center justify-content-center justify-content-md-start gap-2 mb-2 ministry-links">
-                        <img src="logo_min.png" alt="Gerb" height="30">
-                        <span class="small text-white">O‘zbekiston Respublikasi maktabgacha va maktab ta'limi
-                            vazirligi</span>
+                        <a href="https://uzedu.uz/uz" target="_blank"
+                            class="text-decoration-none d-flex align-items-center gap-2">
+                            <img src="logo_min.png" alt="Gerb" height="30">
+                            <span class="small text-white">O‘zbekiston Respublikasi maktabgacha va maktab ta'limi
+                                vazirligi</span>
+                        </a>
                     </div>
                 </div>
                 <div class="col-12">
                     <div
                         class="d-flex align-items-center justify-content-center justify-content-md-start gap-3 school-identity">
-                        <img src="logo.png" alt="Maktab Logosi" class="school-logo" width="60" height="60">
-                        <h1 class="h4 text-white text-uppercase m-0 school-name-text">Marg'ilon shahar 1-umumiy o'rta
-                            ta'lim maktabi</h1>
+                        <a href="https://t.me/mshmaktab1" target="_blank"
+                            class="text-decoration-none d-flex align-items-center gap-3">
+                            <img src="logo.png" alt="Maktab Logosi" class="school-logo" width="60" height="60">
+                            <h1 class="h4 text-white text-uppercase m-0 school-name-text">Marg'ilon shahar 1-umumiy
+                                o'rta ta'lim maktabi</h1>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -96,15 +102,15 @@
     <!-- News & Events Section -->
     <section id="news" class="py-5 news-glass-bg">
         <div class="container">
+            <!-- Dynamic Date Navigation (Calendar) - Moved up for better mobile access -->
+            <div id="dynamicDateNav" class="mb-4 d-flex flex-wrap gap-2 animate-fade-in justify-content-center">
+                <!-- Navigation buttons will be generated here -->
+            </div>
+
             <h2 class="text-center mb-5 section-title">So'nggi Yangiliklar va Tadbirlar</h2>
 
             <div class="row">
                 <div class="col-lg-12">
-                    <!-- Dynamic Date Navigation -->
-                    <div id="dynamicDateNav" class="mb-4 d-flex flex-wrap gap-2 animate-fade-in">
-                        <!-- Navigation buttons will be generated here -->
-                    </div>
-
                     <div id="news-container" class="row g-4">
                         <!-- News will be loaded here dynamically by script.js -->
                         <div class="col-12 text-center py-5 loading-spinner">
@@ -153,6 +159,11 @@
         title="Yuqoriga qaytish">
         <i class="fas fa-chevron-up"></i>
     </button>
+
+    <!-- 3D Home Button -->
+    <a href="index.html" id="homeButton" class="btn-3d-home" title="Bosh sahifaga qaytish">
+        <i class="fas fa-home"></i>
+    </a>
 
     <!-- 3D Jump to Footer Button -->
     <button id="jumpToFooter" class="btn-3d-down" onclick="window.scrollToFooter()" title="Pastga (futerga) o'tish">

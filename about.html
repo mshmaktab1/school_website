@@ -591,17 +591,20 @@
         <!-- Branding Section -->
         <div class="branding-bar">
             <div class="ministry-links">
-                <div class="ministry-item">
+                <a href="https://uzedu.uz/uz" target="_blank" class="ministry-item text-decoration-none">
                     <img src="logo_min.png" alt="Gerb">
                     <span>O'zbekiston Respublikasi maktabgacha va maktab ta'limi vazirligi</span>
-                </div>
+                </a>
             </div>
             <div class="school-identity">
-                <img src="logo.png" alt="Maktab Logosi" class="school-logo"
-                    style="width: 50px !important; height: 50px !important;">
-                <div class="school-name">
-                    <h1>Marg'ilon shahar 1-umumiy o'rta ta'lim maktabi</h1>
-                </div>
+                <a href="https://t.me/mshmaktab1" target="_blank"
+                    class="text-decoration-none d-flex align-items-center gap-2">
+                    <img src="logo.png" alt="Maktab Logosi" class="school-logo"
+                        style="width: 50px !important; height: 50px !important;">
+                    <div class="school-name">
+                        <h1 class="m-0">Marg'ilon shahar 1-umumiy o'rta ta'lim maktabi</h1>
+                    </div>
+                </a>
             </div>
         </div>
 
@@ -615,6 +618,7 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav mx-auto align-items-center">
+                        <li class="nav-item"><a class="nav-link" href="index.html">Bosh sahifa</a></li>
                         <li class="nav-item"><a class="nav-link active" href="about.html">Maktab haqida</a></li>
                         <li class="nav-item"><a class="nav-link" href="achievements.html">Yutuqlar</a></li>
                         <li class="nav-item"><a class="nav-link" href="statistics.html">Statistika</a></li>
@@ -1244,9 +1248,14 @@
     </section>
 
     <!-- Footer -->
-    <footer>
+    <footer class="bg-dark text-white py-4 mt-auto">
         <!-- Content loaded from footer.html via script.js -->
     </footer>
+
+    <!-- 3D Home Button -->
+    <a href="index.html" id="homeButton" class="btn-3d-home" title="Bosh sahifaga qaytish">
+        <i class="fas fa-home"></i>
+    </a>
 
     <!-- 3D Back to Top Button -->
     <button id="backToTop" class="btn-3d-up" onclick="window.scrollTo({top: 0, behavior: 'smooth'})"

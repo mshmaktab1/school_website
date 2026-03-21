@@ -1024,6 +1024,15 @@ footer {
         z-index: 20002;
     }
 
+    /* Mobile Nav Fixes for Visibility */
+    .navbar-collapse {
+        background: var(--dark-navy);
+        padding: 1rem;
+        border-radius: 15px;
+        margin-top: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
     .nav-links {
         display: none;
         flex-direction: column;
@@ -1031,16 +1040,12 @@ footer {
         top: 100%;
         left: 0;
         right: 0;
-        background: var(--dark-green);
+        background: var(--dark-navy);
         padding: 1rem;
         text-align: center;
         gap: 15px;
         z-index: 20001;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-    }
-
-    .footer-qr {
-        display: none !important;
     }
 
     .nav-links.active {
@@ -1624,6 +1629,33 @@ footer {
     footer .row>div {
         text-align: center !important;
     }
+}
+
+/* 3D Home (Bosh Sahifa) Button */
+.btn-3d-home {
+    position: fixed;
+    bottom: 180px;
+    right: 37px;
+    width: 48px;
+    height: 48px;
+    background: #3b82f6;
+    /* Blue modern color */
+    color: white;
+    border: none;
+    border-radius: var(--shape-sharp);
+    font-size: 1.1rem;
+    cursor: pointer;
+    box-shadow: 0 5px 0 #1D4ED8, 0 10px 20px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    z-index: 1000;
+}
+
+.btn-3d-home:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 0 #1D4ED8, 0 12px 25px rgba(0, 0, 0, 0.3);
 }
 
 /* 3D Jump to Footer Button */
