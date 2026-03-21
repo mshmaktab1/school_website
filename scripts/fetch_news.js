@@ -7,11 +7,11 @@ require('dotenv').config();
 const CHANNEL_URL = 'https://t.me/s/mshmaktab1';
 const OUTPUT_FILE = path.join(__dirname, '../news.json');
 const IMAGES_BASE_DIR = path.join(__dirname, '../images');
+const VIDEOS_BASE_DIR = path.join(__dirname, '../videos');
 
-// Ensure base images directory exists
-if (!fs.existsSync(IMAGES_BASE_DIR)) {
-    fs.mkdirSync(IMAGES_BASE_DIR, { recursive: true });
-}
+// Ensure base directories exist
+if (!fs.existsSync(IMAGES_BASE_DIR)) fs.mkdirSync(IMAGES_BASE_DIR, { recursive: true });
+if (!fs.existsSync(VIDEOS_BASE_DIR)) fs.mkdirSync(VIDEOS_BASE_DIR, { recursive: true });
 
 /**
  * Downloads a media file (image or video) from a URL and saves it locally.
@@ -20,12 +20,13 @@ async function downloadMedia(url, filename, monthName) {
     if (!url) return null;
     try {
         // Determine month folder path
-        const monthDir = path.join(IMAGES_BASE_DIR, monthName);
+        const mediaBaseDir = filename.startsWith('video') ? VIDEOS_BASE_DIR : IMAGES_BASE_DIR;
+        const monthDir = path.join(mediaBaseDir, monthName);
         if (!fs.existsSync(monthDir)) {
             fs.mkdirSync(monthDir, { recursive: true });
         }
         const localPath = path.join(monthDir, filename);
-        const relativePath = `images/${monthName}/${filename}`;
+        const relativePath = `${mediaBaseDir.split(path.sep).pop()}/${monthName}/${filename}`;
         if (fs.existsSync(localPath)) return relativePath;
 
         const response = await axios({
@@ -48,15 +49,21 @@ async function downloadMedia(url, filename, monthName) {
 }
 
 function generateMediaFilename(type, date, text, id) {
-    const datePart = date.split('T')[0];
-    const sanitizedText = text ? text.substring(0, 20).toLowerCase()
-        .replace(/[^a-z0-9]/g, '_')
-        .replace(/_+/g, '_')
-        .replace(/^_|_$/g, '') : '';
-    const namePart = sanitizedText || id.replace(/\//g, '_');
+    const d = new Date(date);
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const year = d.getFullYear();
+    const hours = String(d.getHours()).padStart(2, '0');
+    const minutes = String(d.getMinutes()).padStart(2, '0');
+
+    const dateStr = `${day}${month}${year}`;
+    const timeStr = `${hours}${minutes}`;
+
+    // Extract numeric ID from "mshmaktab1/563" -> "563"
+    const numericId = id && id.includes('/') ? id.split('/').pop() : '0';
+
     const ext = type === 'video' ? 'mp4' : 'jpg';
-    // Filename without month; month folder will be handled separately
-    return `${type}_${datePart}_${namePart}.${ext}`;
+    return `${type}_${dateStr}_${timeStr}_${numericId}.${ext}`;
 }
 
 async function fetchSinglePost(id) {
@@ -107,8 +114,39 @@ async function fetchBatch(beforeId = null) {
     $('.tgme_widget_message').each((i, el) => {
         const $msg = $(el);
         const id = $msg.attr('data-post');
-        const text = $msg.find('.tgme_widget_message_text').text();
-        const textHtml = $msg.find('.tgme_widget_message_text').html();
+        const $textContainer = $msg.find('.tgme_widget_message_text');
+
+        // 1. Preserve line breaks before getting text
+        $textContainer.find('br').replaceWith('\n');
+
+        // 2. Ensure spaces between tags (like hashtags in <a> tags)
+        $textContainer.find('*').each((i, tag) => {
+            const nextNode = tag.nextSibling;
+            if (nextNode && nextNode.nodeType === 3 && nextNode.nodeValue && !nextNode.nodeValue.startsWith(' ')) {
+                // If next sibling is text but starting without space, add a space if tag is a link/hashtag
+                if (tag.tagName === 'A') {
+                    // We don't want to break the structure, but we need a space for extraction
+                    // Actually, a simpler way: just append a space temporarily
+                }
+            }
+        });
+
+        let text = $textContainer.text();
+
+        // 3. Fix "stuck" words: lowercase/uzbek-char then uppercase (sentence start)
+        // e.g., "tabrigiAssalomu" -> "tabrigi\nAssalomu"
+        text = text.replace(/([a-z'‘])([A-ZА-ЯЁ])/g, '$1\n$2');
+
+        // 4. Force NEW LINE after hashtags ONLY if followed by a CAPITAL letter
+        // BUT ignore it if there's an underscore before the capital letter (part of hashtag)
+        // e.g. #maktab_hayotiAssalomu -> split
+        // e.g. #You_Tube -> DON'T split
+        text = text.replace(/(#[^\s#.,!?;:()\[\]{}'"]+[^_])([A-ZА-ЯЁ])/g, '$1\n$2');
+
+        // 5. Clean up multiple newlines
+        text = text.replace(/\n{3,}/g, '\n\n').trim();
+
+        const textHtml = $textContainer.html();
         const date = $msg.find('.tgme_widget_message_date time').attr('datetime');
 
         let image = null;
@@ -154,7 +192,7 @@ async function fetchBatch(beforeId = null) {
                     image, video,
                     externalImage: image,
                     externalVideo: video,
-                    isVideoPlaceholder // Flag for recovery script
+                    isVideoPlaceholder
                 });
             }
         }
@@ -177,56 +215,108 @@ async function fetchNews() {
         let batch;
         try {
             batch = await fetchBatch(oldestId);
+            if (!batch || batch.length === 0) break;
         } catch (error) {
-            console.error(`Failed to fetch batch: ${error.message}`);
+            console.error(`CRITICAL error: ${error.message}`);
             break;
         }
 
-        if (batch.length === 0) break;
-
         allNews.push(...batch);
-        const oldestInBatch = batch[0]; // Telegram displays oldest first in batch
+        const oldestInBatch = batch[0];
         const oldestDate = new Date(oldestInBatch.date);
-        oldestId = oldestInBatch.id.split('/')[1];
+        oldestId = oldestInBatch.id && oldestInBatch.id.includes('/') ? oldestInBatch.id.split('/')[1] : oldestInBatch.id;
 
-        console.log(`Reached date: ${oldestDate.toISOString().split('T')[0]}`);
+        console.log(`Batch processed. Current total: ${allNews.length}. Oldest date: ${oldestDate.toISOString().split('T')[0]}`);
 
-        if (oldestDate <= STOP_DATE) {
-            console.log("Reached date threshold (Oct 2024). Stopping crawl.");
-            keepCrawling = false;
-        }
-
-        // Safety break if it's getting too huge for memory, though 500-1000 posts is fine
-        if (allNews.length > 1000) keepCrawling = false;
+        if (oldestDate <= STOP_DATE || allNews.length > 2000) keepCrawling = false;
+        await new Promise(r => setTimeout(r, 1000));
     }
 
     // Deduplicate and localize
     const uniqueNews = Array.from(new Map(allNews.map(item => [item.id, item])).values());
     console.log(`Total unique posts found: ${uniqueNews.length}`);
 
+    // Manual Overrides Folders
+    const manualImagesDir = path.join(IMAGES_BASE_DIR, 'manual');
+    const manualVideosDir = path.join(VIDEOS_BASE_DIR, 'manual');
+    if (!fs.existsSync(manualImagesDir)) fs.mkdirSync(manualImagesDir, { recursive: true });
+    if (!fs.existsSync(manualVideosDir)) fs.mkdirSync(manualVideosDir, { recursive: true });
+
+    console.log("Downloading/Verifying media assets...");
+
     for (const item of uniqueNews) {
-        // Determine month name from the item's date (e.g., "march", "april")
-        const dateObj = new Date(item.date);
-        const monthName = dateObj.toLocaleString('en-US', { month: 'long' }).toLowerCase();
+        try {
+            const dateObj = new Date(item.date);
+            const monthName = dateObj.toLocaleString('en-US', { month: 'long' }).toLowerCase();
+            const numericId = item.id.split('/').pop();
 
-        // Handle Image
-        if (item.externalImage && item.externalImage.startsWith('http')) {
-            const filename = generateMediaFilename('rasm', item.date, item.text, item.id);
-            const localPath = await downloadMedia(item.externalImage, filename, monthName);
-            if (localPath) item.image = localPath;
-        }
+            // Check Manual Override
+            let manualFound = false;
+            const exts = ['.jpg', '.png', '.jpeg', '.webp'];
+            for (const ext of exts) {
+                if (fs.existsSync(path.join(manualImagesDir, numericId + ext))) {
+                    item.image = `images/manual/${numericId}${ext}`;
+                    console.log(`  [OVERRIDE] Manual image for ${numericId}`);
+                    manualFound = true; break;
+                }
+            }
+            if (fs.existsSync(path.join(manualVideosDir, numericId + '.mp4'))) {
+                item.video = `videos/manual/${numericId}.mp4`;
+                console.log(`  [OVERRIDE] Manual video for ${numericId}`);
+                manualFound = true;
+            }
 
-        // Handle Video
-        if (item.externalVideo && item.externalVideo.startsWith('http')) {
-            const filename = generateMediaFilename('video', item.date, item.text, item.id);
-            const localPath = await downloadMedia(item.externalVideo, filename, monthName);
-            if (localPath) item.video = localPath;
-        }
+            if (manualFound) continue;
+
+            // Telegram Downloads
+            if (item.externalImage && item.externalImage.startsWith('http')) {
+                const monthDir = path.join(IMAGES_BASE_DIR, monthName);
+                if (!fs.existsSync(monthDir)) fs.mkdirSync(monthDir, { recursive: true });
+                const filename = generateMediaFilename('img', item.date, item.text, item.id);
+                const localPath = path.join(monthDir, filename);
+
+                if (!fs.existsSync(localPath)) {
+                    try {
+                        const res = await axios({ url: item.externalImage, responseType: 'stream', timeout: 10000 });
+                        const writer = fs.createWriteStream(localPath);
+                        res.data.pipe(writer);
+                        await new Promise((r, j) => { writer.on('finish', r); writer.on('error', j); });
+                        item.image = `images/${monthName}/${filename}`;
+                    } catch (e) { console.error(`Failed ID ${item.id} image: ${e.message}`); }
+                } else {
+                    item.image = `images/${monthName}/${filename}`;
+                }
+            }
+
+            if (item.externalVideo && item.externalVideo.startsWith('http')) {
+                const monthDir = path.join(VIDEOS_BASE_DIR, monthName);
+                if (!fs.existsSync(monthDir)) fs.mkdirSync(monthDir, { recursive: true });
+                const filename = generateMediaFilename('video', item.date, item.text, item.id);
+                const localPath = path.join(monthDir, filename);
+
+                if (!fs.existsSync(localPath)) {
+                    try {
+                        const res = await axios({ url: item.externalVideo, responseType: 'stream', timeout: 30000 });
+                        const writer = fs.createWriteStream(localPath);
+                        res.data.pipe(writer);
+                        await new Promise((r, j) => { writer.on('finish', r); writer.on('error', j); });
+                        item.video = `videos/${monthName}/${filename}`;
+                    } catch (e) { console.error(`Failed ID ${item.id} video: ${e.message}`); }
+                } else {
+                    item.video = `videos/${monthName}/${filename}`;
+                }
+            }
+        } catch (e) { console.error(`Error processing ID ${item.id}:`, e.message); }
     }
 
+    // Sort chronologically: Latest first
     uniqueNews.sort((a, b) => new Date(b.date) - new Date(a.date));
-    fs.writeFileSync(OUTPUT_FILE, JSON.stringify(uniqueNews, null, 2));
-    console.log(`Successfully saved ${uniqueNews.length} items to ${OUTPUT_FILE}`);
+
+    fs.writeFileSync(OUTPUT_FILE, JSON.stringify(uniqueNews, null, 4));
+    console.log(`\nSuccessfully saved ${uniqueNews.length} items to news.json`);
 }
 
-fetchNews();
+fetchNews().catch(err => {
+    console.error("\nFATAL SCRIPT ERROR:", err);
+    process.exit(1);
+});
