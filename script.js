@@ -1,7 +1,7 @@
 // ==================== ADMIN CONFIG ====================
 // Sayt ko'chirilganda faqat shu yerdagi nomni o'zgartiring:
 const MANAGEMENT_CONFIG = {
-    googleAccount: "[mshmaktab1]"
+    googleAccount: "[Google_Akkaunt_Nomi_Shu_Yerga_Yoziladi]"
 };
 
 async function loadFooter() {
@@ -16,6 +16,11 @@ async function loadFooter() {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
+    // Apply saved theme immediately
+    const savedTheme = localStorage.getItem('theme') || 'modern';
+    document.body.classList.remove('theme-modern', 'theme-green', 'theme-midnight', 'theme-sunset', 'theme-ocean');
+    document.body.classList.add('theme-' + savedTheme);
+
     // Load Shared Footer
     const footerContainer = document.querySelector('footer');
     if (footerContainer) {
@@ -185,7 +190,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             news.forEach(item => {
                 const dateObj = new Date(item.date);
-                const dateStr = formatUzbekDate(dateObj);
                 const groupKey = formatMonthYear(dateObj);
 
                 // Initialize a new group if month/year changes
@@ -231,60 +235,18 @@ document.addEventListener('DOMContentLoaded', async () => {
                 }
 
                 const slide = document.createElement('div');
-                slide.className = 'swiper-slide h-auto'; // Ensure equal card heights
+                slide.className = 'swiper-slide h-auto';
 
-                const card = document.createElement('div');
-                card.className = 'card h-100 shadow-sm border-0 news-card-interactive';
-
-                let mediaHtml = '';
-                if (item.video) {
-                    mediaHtml = `
-                        <div class="position-relative" style="height: 200px; background: #000;">
-                            <video src="${item.video}" class="card-img-top w-100 h-100 news-video-preview" style="object-fit: cover;" muted loop playsinline></video>
-                            <div class="position-absolute top-50 start-50 translate-middle">
-                                <i class="fas fa-play-circle fa-3x text-white opacity-75"></i>
-                            </div>
-                        </div>
-                    `;
-                }
-                else if (item.image) {
-                    mediaHtml = `
-                         <img src="${item.image}" class="card-img-top" alt="Yangilik rasmi" loading="lazy" style="height: 200px; object-fit: cover;">
-                    `;
-                }
-                else {
-                    mediaHtml = `
-                         <div class="card-img-top news-placeholder d-flex align-items-center justify-content-center" style="height: 200px; background: var(--primary-gradient); opacity: 0.8;">
-                            <i class="fas fa-school fa-4x text-white opacity-25"></i>
-                         </div>
-                    `;
-                }
-
-                const fullText = item.text || '';
-                const shortText = fullText.length > 120 ? fullText.substring(0, 120) + '...' : fullText;
-
-                const highlightedShortText = shortText.split(/(<[^>]+>)/g).map(part => {
-                    if (part && part.startsWith('<')) return part;
-                    return part.replace(/(#[^\s#.,!?;:()\[\]{}'"]+)/g, '<span class="inline-hashtag">$1</span>');
-                }).join('');
-
-                card.innerHTML = `
-                    ${mediaHtml}
-                    <div class="card-body d-flex flex-column" style="padding: 1.5rem;">
-                        <span class="text-muted small mb-2"><i class="far fa-clock"></i> ${dateStr}</span>
-                        <p class="card-text flex-grow-1" style="line-height: 1.6; margin-bottom: 0.75rem;">${highlightedShortText}</p>
-                        
-                        <button class="btn btn-outline-primary btn-sm mt-3 align-self-start" style="border-radius: 20px; padding: 5px 15px;" onclick="openModal('${item.id.replace(/'/g, "\\'")}')">
-                            Batafsil o'qish <i class="fas fa-arrow-right ms-1"></i>
-                        </button>
-                    </div>
-                `;
-
+                const card = createNewsCard(item);
                 slide.appendChild(card);
+
                 if (currentSwiperWrapperDiv) {
                     currentSwiperWrapperDiv.appendChild(slide);
                 }
             });
+
+            // Initialize Search Logic
+            initNewsSearch();
 
             // Initialize Multiple Swipers (one for each group)
             if (window.Swiper) {
@@ -815,10 +777,12 @@ function initPremiumCalendarWidget() {
             <div class="datetime-display" id="datetimeDisplay">
                 <div class="time-block">
                     <span id="time-hm">00:00</span><span id="time-s">00</span>
+                    <span id="tz-label" class="tz-indicator" style="font-size: 0.6rem; opacity: 0.6; margin-left: 5px; font-weight: 800; border: 1px solid rgba(255,255,255,0.4); padding: 1px 3px; border-radius: 4px;">LOK</span>
                 </div>
                 <div class="date-block">
                     <div id="date-weekday">Dushanba</div>
                     <div id="date-full">1 Yanvar, 2026</div>
+                    <button id="tz-toggle-btn" class="tz-toggle">Mahalliy vaqt</button>
                 </div>
                 <div class="cal-icon-wrap">
                     <i class="fas fa-calendar-alt"></i>
@@ -914,24 +878,51 @@ function initPremiumCalendarWidget() {
     // Selected Date Tracker
     let selectedDate = new Date(currentRealDate);
 
+    let useTashkentTime = localStorage.getItem('useTashkentTime') === 'true';
+    const tzBtn = document.getElementById('tz-toggle-btn');
+    if (tzBtn) {
+        tzBtn.textContent = useTashkentTime ? 'Toshkent vaqti' : 'Mahalliy vaqt';
+        tzBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            useTashkentTime = !useTashkentTime;
+            localStorage.setItem('useTashkentTime', useTashkentTime);
+            tzBtn.textContent = useTashkentTime ? 'Toshkent vaqti' : 'Mahalliy vaqt';
+            updateLiveClock();
+        });
+    }
+
     function updateLiveClock() {
-        const now = new Date();
+        let now = new Date();
+        const tzLabel = document.getElementById('tz-label');
+
+        if (useTashkentTime) {
+            // Tashkent is GMT+5
+            const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+            now = new Date(utc + (3600000 * 5));
+            if (tzLabel) {
+                tzLabel.textContent = 'UZB';
+                tzLabel.style.color = '#fbbf24'; // Warning color (amber) to show special mode
+            }
+        } else {
+            if (tzLabel) {
+                tzLabel.textContent = 'LOK';
+                tzLabel.style.color = 'white';
+            }
+        }
+
         const hh = String(now.getHours()).padStart(2, '0');
         const mm = String(now.getMinutes()).padStart(2, '0');
         const ss = String(now.getSeconds()).padStart(2, '0');
 
-        timeHm.textContent = hh + ':' + mm;
-        timeS.textContent = ':' + ss;
+        if (timeHm) timeHm.textContent = hh + ':' + mm;
+        if (timeS) timeS.textContent = ':' + ss;
 
         const weekdays = ["Yakshanba", "Dushanba", "Seshanba", "Chorshanba", "Payshanba", "Juma", "Shanba"];
         const months = ["Yanvar", "Fevral", "Mart", "Aprel", "May", "Iyun", "Iyul", "Avgust", "Sentyabr", "Oktyabr", "Noyabr", "Dekabr"];
 
-        // Show the currently selected date in the display, updating day and full date
-        // Actually, user wants "live time" and "selected date"? No, usually a clock shows current day.
-        // But if they select a date, maybe we update the display. Let's make the text show the SELECTED date, but live time always shows CURRENT time.
-        const d = selectedDate;
-        dateWeekday.textContent = weekdays[d.getDay()];
-        dateFull.textContent = d.getDate() + ' ' + months[d.getMonth()] + ', ' + d.getFullYear();
+        const d = useTashkentTime ? now : selectedDate;
+        if (dateWeekday) dateWeekday.textContent = weekdays[d.getDay()];
+        if (dateFull) dateFull.textContent = d.getDate() + ' ' + months[d.getMonth()] + ', ' + d.getFullYear();
     }
 
     setInterval(updateLiveClock, 1000);
@@ -1201,3 +1192,138 @@ document.addEventListener('click', (e) => {
         playSoftClick();
     }
 });
+
+// ==================== NEWS RENDERING & SEARCH ====================
+
+function createNewsCard(item, query = '') {
+    const dateObj = new Date(item.date);
+    const dateStr = formatUzbekDate(dateObj);
+
+    const card = document.createElement('div');
+    card.className = 'card h-100 shadow-sm border-0 news-card-interactive';
+
+    let mediaHtml = '';
+    if (item.video) {
+        mediaHtml = `
+            <div class="position-relative" style="height: 300px; background: #000;">
+                <video src="${item.video}" class="card-img-top w-100 h-100 news-video-preview" style="object-fit: contain;" muted loop playsinline></video>
+                <div class="position-absolute top-50 start-50 translate-middle">
+                    <i class="fas fa-play-circle fa-3x text-white opacity-75"></i>
+                </div>
+            </div>
+        `;
+    } else if (item.image) {
+        mediaHtml = `
+            <div style="height: 300px; background: #f8fafc; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+                <img src="${item.image}" class="card-img-top w-100 h-100" alt="Yangilik rasmi" loading="lazy" style="object-fit: contain;">
+            </div>
+        `;
+    } else {
+        mediaHtml = `
+            <div class="card-img-top news-placeholder d-flex align-items-center justify-content-center" style="height: 300px; background: var(--primary-gradient); opacity: 0.8;">
+                <i class="fas fa-school fa-4x text-white opacity-25"></i>
+            </div>
+        `;
+    }
+
+    const fullText = item.text || '';
+    const shortText = fullText.length > 120 ? fullText.substring(0, 120) + '...' : fullText;
+
+    let displayHtml = shortText.split(/(<[^>]+>)/g).map(part => {
+        if (part && part.startsWith('<')) return part;
+        return part.replace(/(#[^\s#.,!?;:()\[\]{}'"]+)/g, '<span class="inline-hashtag">$1</span>');
+    }).join('');
+
+    // Apply Query Highlighting
+    if (query) {
+        const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+        displayHtml = displayHtml.replace(regex, '<mark class="search-highlight">$1</mark>');
+    }
+
+    card.innerHTML = `
+        ${mediaHtml}
+        <div class="card-body d-flex flex-column" style="padding: 1.5rem;">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="text-muted small"><i class="far fa-clock"></i> ${dateStr}</span>
+            </div>
+            <p class="card-text flex-grow-1" style="line-height: 1.6; margin-bottom: 0.75rem;">${displayHtml}</p>
+            <button class="btn btn-outline-primary btn-sm mt-3 align-self-start rounded-pill px-3" onclick="openModal('${item.id.replace(/'/g, "\\'")}')">
+                Batafsil o'qish <i class="fas fa-arrow-right ms-1"></i>
+            </button>
+        </div>
+    `;
+    return card;
+}
+
+function initNewsSearch() {
+    const searchInput = document.getElementById('newsSearchInput');
+    const newsContainer = document.getElementById('news-container');
+    const resultsContainer = document.getElementById('searchResultsContainer');
+    const resultsGrid = document.getElementById('searchResultsGrid');
+    const dynamicNav = document.getElementById('dynamicDateNav');
+    const sectionTitle = document.querySelector('.section-title');
+
+    if (!searchInput) return;
+
+    searchInput.addEventListener('input', (e) => {
+        const query = e.target.value.toLowerCase().trim();
+        if (query.length >= 2) {
+            const results = window.globalNewsData.filter(item =>
+                (item.text && item.text.toLowerCase().includes(query)) ||
+                (item.id && item.id.toLowerCase().includes(query))
+            );
+
+            newsContainer.style.display = 'none';
+            if (dynamicNav) dynamicNav.style.display = 'none';
+            if (sectionTitle) sectionTitle.style.display = 'none';
+            resultsContainer.style.display = 'block';
+
+            renderSearchResults(results, query);
+        } else {
+            // Reset view to normal news but keep the characters in search input
+            newsContainer.style.display = 'flex';
+            if (dynamicNav) dynamicNav.style.display = 'flex';
+            if (sectionTitle) sectionTitle.style.display = 'block';
+            resultsContainer.style.display = 'none';
+        }
+    });
+
+    // Ctrl + F Shortcut logic
+    window.addEventListener('keydown', (e) => {
+        if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+            e.preventDefault();
+            searchInput.focus();
+            searchInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    });
+
+    window.clearSearch = function () {
+        searchInput.value = '';
+        newsContainer.style.display = 'flex';
+        if (dynamicNav) dynamicNav.style.display = 'flex';
+        if (sectionTitle) sectionTitle.style.display = 'block';
+        resultsContainer.style.display = 'none';
+    };
+
+    function renderSearchResults(results, query) {
+        resultsGrid.innerHTML = '';
+        if (results.length === 0) {
+            resultsGrid.innerHTML = `
+                <div class="col-12 text-center py-5">
+                    <i class="fas fa-search-minus fa-3x text-muted mb-3"></i>
+                    <p class="text-muted fs-5">Afsuski, "<b>${query}</b>" bo'yicha hech qanday natija topilmadi.</p>
+                    <button class="btn btn-primary rounded-pill mt-2" onclick="clearSearch()">Barcha yangiliklarga qaytish</button>
+                </div>
+            `;
+            return;
+        }
+
+        results.forEach(item => {
+            const col = document.createElement('div');
+            col.className = 'col';
+            const card = createNewsCard(item, query);
+            col.appendChild(card);
+            resultsGrid.appendChild(col);
+        });
+    }
+}

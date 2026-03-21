@@ -90,6 +90,31 @@ body {
 }
 
 
+/* Hero Title Soft 3D Style - Extra Dark & Professional (Theme-aware) */
+.main-hero-title {
+    color: var(--dark-navy) !important;
+    -webkit-text-fill-color: var(--dark-navy) !important;
+    background: none !important;
+    text-transform: uppercase !important;
+    font-weight: 950 !important;
+    /* Composite 3D: Sharp White Contour + Heavy Dark Depth */
+    text-shadow:
+        1px 1px 0px #fff,
+        -1px -1px 0px #fff,
+        1px -1px 0px #fff,
+        -1px 1px 0px #fff,
+        3px 3px 0px rgba(0, 0, 0, 0.3),
+        5px 5px 12px rgba(0, 0, 0, 0.2) !important;
+    letter-spacing: 2px !important;
+    line-height: 1.1 !important;
+}
+
+.hero-subtitle {
+    color: var(--dark-navy) !important;
+    font-weight: 800 !important;
+    text-shadow: 1px 1px 0px #fff, 0 0 8px rgba(255, 255, 255, 0.6) !important;
+}
+
 .gradient-text {
     background: var(--primary-gradient);
     -webkit-background-clip: text;
@@ -303,19 +328,44 @@ body.theme-green .navbar-dark .navbar-nav .nav-link {
 
 .navbar-nav .nav-link {
     transition: all 0.3s ease;
-    padding: 0.5rem 1.2rem !important;
+    padding: 10px 20px !important;
+    color: #000 !important;
+    /* Force black as requested */
+    font-weight: 900 !important;
+    text-shadow: 2px 2px 0 #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff !important;
+    /* Oq soya */
+    text-transform: uppercase;
+    font-size: 0.95rem;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    letter-spacing: 0.5px;
     margin: 0 4px;
     border-radius: 25px;
     border: 1px solid transparent;
 }
 
-.navbar-nav .nav-link:hover,
-.navbar-nav .nav-link.active {
-    color: #fff !important;
+.navbar-nav .nav-link.active,
+.navbar-nav .nav-link:hover {
+    color: #000 !important;
+    transform: translateY(-2px);
+    text-shadow: 2px 2px 5px rgba(255, 255, 255, 0.5), -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff;
     background: rgba(255, 255, 255, 0.2);
     border: 1px solid rgba(255, 255, 255, 0.3);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    transform: translateY(-2px);
+}
+
+.navbar-nav .nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 3px;
+    width: 60%;
+    background: #000;
+    /* Dark line for dark text */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    border-radius: 2px;
 }
 
 /* Hero Section */
@@ -521,8 +571,8 @@ footer {
     flex-shrink: 0;
 }
 
-/* Center Highlight Simulation: 
-   Real CSS-only center checking is hard without scroll-snap. 
+/* Center Highlight Simulation:
+   Real CSS-only center checking is hard without scroll-snap.
    We will rely on the expanded state to scale images up globally. */
 .news-card-interactive.expanded .news-marquee img {
     height: 140px;
@@ -1024,13 +1074,37 @@ footer {
         z-index: 20002;
     }
 
-    /* Mobile Nav Fixes for Visibility */
+    /* Mobile Nav Fixes for Visibility - Light Glassmorphism with High Contrast Text */
     .navbar-collapse {
-        background: var(--dark-navy);
-        padding: 1rem;
-        border-radius: 15px;
+        background: rgba(255, 255, 255, 0.98) !important;
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        padding: 1.5rem;
+        border-radius: 20px;
         margin-top: 15px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+        border: 2px solid white;
+    }
+
+    .navbar-collapse .nav-link {
+        color: var(--primary-color) !important;
+        font-weight: 900 !important;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        /* Soft 3D shadow - Theme Aware */
+        text-shadow: 1px 1px 0 #fff, 2px 2px 0 #fff, 0px 4px 6px rgba(0, 0, 0, 0.1) !important;
+        padding: 12px 20px !important;
+        margin-bottom: 8px !important;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 4px 0 #cbd5e1;
+        /* 3D shakl (bottom) */
+        text-align: center;
+        border: 1px solid #e2e8f0;
+    }
+
+    .navbar-collapse .nav-item {
+        margin-bottom: 5px;
     }
 
     .nav-links {
@@ -1040,12 +1114,12 @@ footer {
         top: 100%;
         left: 0;
         right: 0;
-        background: var(--dark-navy);
+        background: rgba(255, 255, 255, 0.95);
         padding: 1rem;
         text-align: center;
         gap: 15px;
         z-index: 20001;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     }
 
     .nav-links.active {
@@ -1812,7 +1886,7 @@ body.theme-green .btn-3d-up:active {
     width: 100vw;
     height: 100vh;
     pointer-events: none;
-    z-index: 9999;
+    z-index: 1;
     overflow: hidden;
 }
 
@@ -2082,15 +2156,16 @@ body.theme-green .custom-swiper-btn:hover {
 @media (max-width: 992px) {
     #global-calendar-widget {
         display: block;
-        /* Kalendar endi telefonlarda ko'rinadi */
         position: fixed;
-        bottom: 85px;
-        left: 20px;
-        top: auto;
+        top: 20px;
+        /* Moved to top as requested */
+        left: 10px;
+        bottom: auto;
         right: auto;
-        z-index: 1045;
-        transform: scale(0.85);
-        transform-origin: bottom left;
+        z-index: 20002;
+        /* Above even the particles and navbar */
+        transform: scale(0.75);
+        transform-origin: top left;
     }
 
     .datetime-display {
@@ -2223,7 +2298,27 @@ body.theme-green .custom-swiper-btn:hover {
     padding-left: 15px;
 }
 
-#date-weekday {
+/* Timezone Switcher */
+.tz-toggle {
+    font-size: 0.7rem;
+    padding: 2px 8px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    margin-top: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.tz-toggle:hover {
+    background: white;
+    color: var(--primary-color);
+}
+
+.date-block .day-of-week {
     font-size: 0.8rem;
     font-weight: 700;
     text-transform: uppercase;
@@ -2309,10 +2404,17 @@ body.theme-green .custom-swiper-btn:hover {
 .section-title {
     text-align: center;
     font-size: 2.5rem;
-    font-weight: 800;
+    font-weight: 900;
     margin-bottom: 3rem;
     position: relative;
     padding-bottom: 15px;
+    color: #000;
+    /* Sharp professional depth shadow - Theme Aware Depth */
+    text-shadow:
+        1px 1px 0 #fff,
+        -1px -1px 0 #fff,
+        3px 3px 6px rgba(0, 0, 0, 0.2);
+    color: var(--dark-navy);
 }
 
 .section-title::after {
@@ -2619,5 +2721,80 @@ body.theme-green .cal-day:not(.empty):hover {
 
     .team-info-container h3 {
         font-size: 1.5rem;
+    }
+}
+
+/* News Search Bar - Floating Glass Theme */
+.news-search-container {
+    max-width: 600px;
+    margin: -35px auto 40px auto;
+    position: relative;
+    z-index: 50;
+    padding: 0 20px;
+}
+
+.news-search-input {
+    width: 100%;
+    height: 65px;
+    border: none !important;
+    border-radius: 50px;
+    padding: 0 70px 0 35px;
+    background: var(--white);
+    box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.15);
+    font-size: 1.15rem;
+    color: var(--text-main);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.news-search-input:focus {
+    box-shadow: 0 20px 45px -12px rgba(67, 56, 202, 0.25);
+    background: #fff;
+    transform: translateY(-4px) scale(1.02);
+    outline: none;
+}
+
+.search-icon-inside {
+    position: absolute;
+    right: 45px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--primary-color);
+    font-size: 1.4rem;
+    pointer-events: none;
+    transition: all 0.3s ease;
+}
+
+.news-search-input:focus+.search-icon-inside {
+    transform: translateY(-50%) rotate(90deg);
+}
+
+/* Search Highlights */
+.search-highlight {
+    background: #ffeb3b;
+    color: #000;
+    padding: 0 2px;
+    border-radius: 3px;
+    font-weight: 700;
+}
+
+/* Results section */
+#searchResultsContainer {
+    animation: fadeInNews 0.5s ease;
+    border-radius: var(--shape-smooth);
+    background: var(--white);
+    padding: 2.5rem;
+    box-shadow: var(--card-shadow);
+    margin-bottom: 3rem;
+}
+
+@keyframes fadeInNews {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }

@@ -92,9 +92,12 @@
     <!-- Hero Section -->
     <section class="hero text-center text-white py-5">
         <div class="container">
-            <h1 class="display-4 fw-bold">Marg'ilon shahar 1-umumiy o'rta ta'lim maktabining veb-saytiga <br>XUSH
-                KELIBSIZ!</h1>
-            <p class="lead">Bilim - kelajak poydevori. <br>Bizning maktabimizda har bir o'quvchi o'z iqtidorini namoyon
+            <h1 class="display-4 fw-bold main-hero-title">Marg'ilon shahar 1-umumiy o'rta ta'lim maktabining veb-saytiga
+                <br>XUSH
+                KELIBSIZ!
+            </h1>
+            <p class="lead hero-subtitle">Bilim - kelajak poydevori. <br>Bizning maktabimizda har bir o'quvchi o'z
+                iqtidorini namoyon
                 etadi.</p>
         </div>
     </section>
@@ -102,17 +105,38 @@
     <!-- News & Events Section -->
     <section id="news" class="py-5 news-glass-bg">
         <div class="container">
-            <!-- Dynamic Date Navigation (Calendar) - Moved up for better mobile access -->
+            <!-- News Search Bar -->
+            <div class="news-search-container">
+                <div class="position-relative">
+                    <input type="text" id="newsSearchInput" class="form-control news-search-input"
+                        placeholder="Yangiliklarni qidirish... (Ctrl + F)" aria-label="Yangiliklarni qidirish">
+                    <i class="fas fa-search search-icon-inside"></i>
+                </div>
+            </div>
+
+            <!-- Dynamic Date Navigation (Calendar) -->
             <div id="dynamicDateNav" class="mb-4 d-flex flex-wrap gap-2 animate-fade-in justify-content-center">
                 <!-- Navigation buttons will be generated here -->
             </div>
 
             <h2 class="text-center mb-5 section-title">So'nggi Yangiliklar va Tadbirlar</h2>
 
+            <!-- Search Results Display -->
+            <div id="searchResultsContainer" style="display: none; margin-bottom: 50px;">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="h4 text-primary text-uppercase mb-0"><i class="fas fa-search me-2"></i> Qidiruv
+                        natijalari
+                    </h2>
+                    <button class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="clearSearch()">X
+                        Qidiruvni o'chirish</button>
+                </div>
+                <div id="searchResultsGrid" class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4"></div>
+                <hr class="my-5">
+            </div>
+
             <div class="row">
                 <div class="col-lg-12">
                     <div id="news-container" class="row g-4">
-                        <!-- News will be loaded here dynamically by script.js -->
                         <div class="col-12 text-center py-5 loading-spinner">
                             <div class="spinner-border text-primary" role="status">
                                 <span class="visually-hidden">Loading...</span>
